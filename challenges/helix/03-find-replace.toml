@@ -1,0 +1,14 @@
+[metadata]
+id = "find-replace-03"
+title = "Find and replace text"
+description = "Replace 'cat' with 'dog' in the sentence"
+difficulty = "beginner"
+tags = ["search", "replace", "editing"]
+
+[hints]
+generic = "Search for the word and replace it with the new word"
+helix = "Use '/' to search for 'cat', then 'cw' to change word and type 'dog'"
+
+[content]
+starting = "The cat is sleeping"
+target = "The dog is sleeping"

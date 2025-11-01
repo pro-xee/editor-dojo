@@ -54,17 +54,30 @@ impl ChallengeScreen {
             .split(area);
 
         // Title
-        let title = Paragraph::new(format!("Challenge: {}", challenge.title()))
+        let title = Paragraph::new(format!("Challenge: {} ({})", challenge.title(), challenge.id()))
             .style(Style::default().fg(Color::Cyan))
             .alignment(Alignment::Center)
             .block(Block::default().borders(Borders::ALL));
         frame.render_widget(title, chunks[0]);
 
         // Content
-        let content_text = vec![
+        let mut content_text = vec![
             Line::from(""),
             Line::from(challenge.description()),
             Line::from(""),
+        ];
+
+        // Add tags if present
+        if !challenge.tags().is_empty() {
+            let tags_str = challenge.tags().join(", ");
+            content_text.push(Line::from(vec![
+                Span::styled("Tags: ", Style::default().fg(Color::Cyan)),
+                Span::raw(tags_str),
+            ]));
+            content_text.push(Line::from(""));
+        }
+
+        content_text.extend(vec![
             Line::from(vec![
                 Span::styled("Starting: ", Style::default().fg(Color::Yellow)),
                 Span::raw(format!("\"{}\"", challenge.starting_content())),
@@ -80,7 +93,7 @@ impl ChallengeScreen {
             ]),
             Line::from(""),
             Line::from("Editor closes automatically when complete."),
-        ];
+        ]);
 
         let content = Paragraph::new(content_text)
             .alignment(Alignment::Left)
