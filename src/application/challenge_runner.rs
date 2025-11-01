@@ -6,6 +6,7 @@ use anyhow::Result;
 
 use crate::application::validator::SolutionValidator;
 use crate::domain::{Challenge, Solution};
+use crate::infrastructure::recorder::Recorder;
 
 /// Trait for spawning and managing an editor process
 pub trait EditorSpawner {
@@ -48,6 +49,7 @@ pub trait FileSystem {
 /// - File watching
 /// - Solution validation
 /// - Timing
+/// - Recording (optional)
 pub struct ChallengeRunner<E, W, F>
 where
     E: EditorSpawner,
@@ -58,6 +60,7 @@ where
     watcher: W,
     filesystem: F,
     validator: SolutionValidator,
+    recorder: Option<Box<dyn Recorder>>,
 }
 
 impl<E, W, F> ChallengeRunner<E, W, F>
@@ -72,7 +75,13 @@ where
             watcher,
             filesystem,
             validator: SolutionValidator::new(),
+            recorder: None,
         }
+    }
+
+    pub fn with_recorder(mut self, recorder: Box<dyn Recorder>) -> Self {
+        self.recorder = Some(recorder);
+        self
     }
 
     /// Runs the challenge and returns the solution
@@ -86,13 +95,41 @@ where
         let (tx, rx) = mpsc::channel();
         self.watcher.watch(&temp_file, tx)?;
 
-        // Start timer and spawn editor
+        // Prepare recording if available
+        let recording_path = if self.recorder.is_some() {
+            use crate::infrastructure::AsciinemaRecorder;
+            Some(AsciinemaRecorder::generate_recording_path(challenge.id())?)
+        } else {
+            None
+        };
+
+        // Start timer and spawn editor (with or without recording)
         let start_time = Instant::now();
-        self.editor.spawn(&temp_file)?;
+        let mut recording_process = None;
+
+        if let (Some(recorder), Some(rec_path)) = (self.recorder.as_mut(), &recording_path) {
+            // Spawn with recording
+            let child = recorder.start_recording(&temp_file, rec_path)?;
+            recording_process = Some(child);
+        } else {
+            // Spawn without recording
+            self.editor.spawn(&temp_file)?;
+        }
 
         // Wait for file changes and validate
         let mut completed = false;
-        while self.editor.is_running() {
+        loop {
+            // Check if process is still running
+            let is_running = if let Some(child) = recording_process.as_mut() {
+                child.try_wait()?.is_none()
+            } else {
+                self.editor.is_running()
+            };
+
+            if !is_running {
+                break;
+            }
+
             // Check for file change notifications
             if rx.try_recv().is_ok() {
                 // Read current content
@@ -114,16 +151,34 @@ where
 
         let elapsed = start_time.elapsed();
 
-        // Cleanup
-        self.editor.terminate()?;
+        // Cleanup editor process
+        if let Some(mut child) = recording_process {
+            let _ = child.wait(); // Wait for asciinema to finish
+        } else {
+            self.editor.terminate()?;
+        }
         self.watcher.stop()?;
         self.filesystem.cleanup(&temp_file)?;
 
-        // Return solution
-        if completed {
-            Ok(Solution::completed(elapsed))
+        // Build solution
+        let mut solution = if completed {
+            Solution::completed(elapsed)
         } else {
-            Ok(Solution::incomplete(elapsed))
+            Solution::incomplete(elapsed)
+        };
+
+        // Attach recording if available
+        if let (Some(recorder), Some(rec_path)) = (self.recorder.as_ref(), recording_path) {
+            match recorder.finalize_recording(&rec_path) {
+                Ok(recording) => {
+                    solution = solution.with_recording(recording);
+                }
+                Err(e) => {
+                    eprintln!("Warning: Failed to finalize recording: {}", e);
+                }
+            }
         }
+
+        Ok(solution)
     }
 }
