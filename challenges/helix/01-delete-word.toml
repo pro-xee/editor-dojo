@@ -1,0 +1,14 @@
+[metadata]
+id = "delete-word-01"
+title = "Delete the word REMOVE"
+description = "Remove the word 'REMOVE' from the text"
+difficulty = "beginner"
+tags = ["movement", "deletion", "word"]
+
+[hints]
+generic = "Move to the word, then delete it"
+helix = "Use 'w' to move by words, 'wd' to delete word"
+
+[content]
+starting = "Hello REMOVE world"
+target = "Hello world"

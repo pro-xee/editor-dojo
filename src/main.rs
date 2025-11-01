@@ -6,9 +6,8 @@ mod ui;
 use anyhow::{Context, Result};
 
 use application::ChallengeRunner;
-use domain::Challenge;
-use infrastructure::{FileChangeWatcher, HelixEditor, LocalFileSystem};
-use ui::{ChallengeScreen, ResultsScreen};
+use infrastructure::{ChallengeLoader, FileChangeWatcher, HelixEditor, LocalFileSystem, TomlChallengeLoader};
+use ui::{ChallengeListScreen, ChallengeScreen, ResultsScreen};
 
 fn main() -> Result<()> {
     // Check if Helix is installed
@@ -18,16 +17,25 @@ fn main() -> Result<()> {
         std::process::exit(1);
     }
 
-    // Create the hardcoded challenge
-    let challenge = Challenge::new(
-        "Delete the word REMOVE",
-        "Remove the word 'REMOVE' from the text.",
-        "Hello REMOVE world",
-        "Hello world",
-        "Use 'w' to move by words, select with 'v', delete with 'd'",
-    );
+    // Load challenges from TOML files
+    let loader = TomlChallengeLoader::new("challenges/helix");
+    let challenges = loader.load_all().context("Failed to load challenges")?;
 
-    // Show challenge screen
+    // Show challenge list screen
+    let list_screen = ChallengeListScreen::new(challenges);
+    let selected_challenge = list_screen
+        .show()
+        .context("Failed to display challenge list screen")?;
+
+    let challenge = match selected_challenge {
+        Some(c) => c,
+        None => {
+            println!("No challenge selected.");
+            return Ok(());
+        }
+    };
+
+    // Show challenge brief screen
     let challenge_screen = ChallengeScreen::new();
     let should_continue = challenge_screen
         .show(&challenge)
