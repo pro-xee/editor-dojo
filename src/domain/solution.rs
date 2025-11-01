@@ -28,10 +28,6 @@ impl Solution {
         self.completed
     }
 
-    pub fn elapsed_time(&self) -> Duration {
-        self.elapsed_time
-    }
-
     pub fn elapsed_seconds(&self) -> u64 {
         self.elapsed_time.as_secs()
     }

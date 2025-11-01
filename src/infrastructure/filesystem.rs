@@ -1,5 +1,5 @@
 use std::fs;
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 
 use anyhow::{Context, Result};
 use tempfile::Builder;
@@ -44,11 +44,11 @@ impl FileSystem for LocalFileSystem {
         Ok(path)
     }
 
-    fn read_file(&self, path: &PathBuf) -> Result<String> {
+    fn read_file(&self, path: &Path) -> Result<String> {
         fs::read_to_string(path).with_context(|| format!("Failed to read file: {}", path.display()))
     }
 
-    fn cleanup(&self, path: &PathBuf) -> Result<()> {
+    fn cleanup(&self, path: &Path) -> Result<()> {
         // If the file still exists, remove it
         if path.exists() {
             fs::remove_file(path)

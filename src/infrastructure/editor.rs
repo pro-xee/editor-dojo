@@ -1,5 +1,5 @@
 use std::cell::RefCell;
-use std::path::PathBuf;
+use std::path::Path;
 use std::process::{Child, Command};
 
 use anyhow::{Context, Result};
@@ -31,7 +31,7 @@ impl Default for HelixEditor {
 }
 
 impl EditorSpawner for HelixEditor {
-    fn spawn(&mut self, file_path: &PathBuf) -> Result<()> {
+    fn spawn(&mut self, file_path: &Path) -> Result<()> {
         let child = Command::new("hx")
             .arg(file_path)
             .spawn()

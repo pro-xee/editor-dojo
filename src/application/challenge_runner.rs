@@ -1,4 +1,4 @@
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 use std::sync::mpsc;
 use std::time::Instant;
 
@@ -10,7 +10,7 @@ use crate::domain::{Challenge, Solution};
 /// Trait for spawning and managing an editor process
 pub trait EditorSpawner {
     /// Spawns an editor with the given file path
-    fn spawn(&mut self, file_path: &PathBuf) -> Result<()>;
+    fn spawn(&mut self, file_path: &Path) -> Result<()>;
 
     /// Terminates the editor process gracefully
     fn terminate(&mut self) -> Result<()>;
@@ -22,7 +22,7 @@ pub trait EditorSpawner {
 /// Trait for watching file changes
 pub trait FileWatcher {
     /// Starts watching the file and sends notifications on the channel
-    fn watch(&mut self, file_path: &PathBuf, tx: mpsc::Sender<()>) -> Result<()>;
+    fn watch(&mut self, file_path: &Path, tx: mpsc::Sender<()>) -> Result<()>;
 
     /// Stops watching the file
     fn stop(&mut self) -> Result<()>;
@@ -34,10 +34,10 @@ pub trait FileSystem {
     fn create_temp_file(&self, content: &str) -> Result<PathBuf>;
 
     /// Reads the content of a file
-    fn read_file(&self, path: &PathBuf) -> Result<String>;
+    fn read_file(&self, path: &Path) -> Result<String>;
 
     /// Cleans up the temporary file
-    fn cleanup(&self, path: &PathBuf) -> Result<()>;
+    fn cleanup(&self, path: &Path) -> Result<()>;
 }
 
 /// Orchestrates the challenge execution flow

@@ -1,4 +1,4 @@
-use std::path::PathBuf;
+use std::path::Path;
 use std::sync::mpsc;
 use std::time::Duration;
 
@@ -25,7 +25,7 @@ impl Default for FileChangeWatcher {
 }
 
 impl FileWatcher for FileChangeWatcher {
-    fn watch(&mut self, file_path: &PathBuf, tx: mpsc::Sender<()>) -> Result<()> {
+    fn watch(&mut self, file_path: &Path, tx: mpsc::Sender<()>) -> Result<()> {
         // Create a debounced watcher to avoid excessive notifications
         let config = Config::default().with_poll_interval(Duration::from_millis(100));
 
