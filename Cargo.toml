@@ -1,0 +1,11 @@
+[package]
+name = "editor-dojo"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+ratatui = "0.28"
+crossterm = "0.28"
+anyhow = "1.0"
+notify = "6.1"
+tempfile = "3.13"
