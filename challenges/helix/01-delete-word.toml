@@ -8,6 +8,11 @@ tags = ["movement", "deletion", "word"]
 [hints]
 generic = "Move to the word, then delete it"
 helix = "Use 'w' to move by words, 'wd' to delete word"
+hint_1 = "Word motions in Helix: 'w' moves to the start of the next word"
+hint_2 = "Deletion commands: 'd' deletes the selection, pair it with a motion"
+hint_3 = "Combine them: Press 'w' to reach 'REMOVE', then 'wd' to delete the word and trailing space"
+optimal_solution = "wwd"
+optimal_keystrokes = 3
 
 [content]
 starting = "Hello REMOVE world"

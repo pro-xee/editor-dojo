@@ -12,6 +12,9 @@ pub struct Challenge {
     hint: String,
     difficulty: Option<String>,
     tags: Vec<String>,
+    progressive_hints: Vec<String>,
+    optimal_solution: Option<String>,
+    optimal_keystrokes: Option<u32>,
 }
 
 impl Challenge {
@@ -32,6 +35,9 @@ impl Challenge {
             hint: hint.into(),
             difficulty: None,
             tags: Vec::new(),
+            progressive_hints: Vec::new(),
+            optimal_solution: None,
+            optimal_keystrokes: None,
         }
     }
 
@@ -42,6 +48,17 @@ impl Challenge {
 
     pub fn with_tags(mut self, tags: Vec<String>) -> Self {
         self.tags = tags;
+        self
+    }
+
+    pub fn with_progressive_hints(mut self, hints: Vec<String>) -> Self {
+        self.progressive_hints = hints;
+        self
+    }
+
+    pub fn with_optimal_solution(mut self, solution: impl Into<String>, keystrokes: u32) -> Self {
+        self.optimal_solution = Some(solution.into());
+        self.optimal_keystrokes = Some(keystrokes);
         self
     }
 
@@ -75,5 +92,21 @@ impl Challenge {
 
     pub fn tags(&self) -> &[String] {
         &self.tags
+    }
+
+    pub fn progressive_hints(&self) -> &[String] {
+        &self.progressive_hints
+    }
+
+    pub fn has_progressive_hints(&self) -> bool {
+        !self.progressive_hints.is_empty()
+    }
+
+    pub fn optimal_solution(&self) -> Option<&str> {
+        self.optimal_solution.as_deref()
+    }
+
+    pub fn optimal_keystrokes(&self) -> Option<u32> {
+        self.optimal_keystrokes
     }
 }
