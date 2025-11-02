@@ -1,0 +1,14 @@
+[metadata]
+id = "yank-word-28"
+title = "Copy (Yank) a Word"
+description = "Copy the word 'public' and paste it before 'string'"
+difficulty = "beginner"
+tags = ["yank", "copy", "paste", "word"]
+
+[hints]
+generic = "Copy a word and paste it elsewhere"
+helix = "Move to 'public', press 'yw' to yank word, move to 's' in string, press 'P' to paste before cursor"
+
+[content]
+starting = "public int Count { get; } string Name;"
+target = "public int Count { get; } public string Name;"

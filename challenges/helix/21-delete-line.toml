@@ -1,0 +1,19 @@
+[metadata]
+id = "delete-line-21"
+title = "Delete Entire Line"
+description = "Delete the comment line"
+difficulty = "beginner"
+tags = ["deletion", "line"]
+
+[hints]
+generic = "Delete the entire line where the cursor is positioned"
+helix = "Position cursor on comment line, press 'dd' to delete entire line"
+
+[content]
+starting = """public class MyClass {
+    // This comment should be removed
+    private int _value;
+}"""
+target = """public class MyClass {
+    private int _value;
+}"""

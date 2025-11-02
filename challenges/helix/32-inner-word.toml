@@ -1,0 +1,14 @@
+[metadata]
+id = "inner-word-32"
+title = "Delete Inner Word"
+description = "Delete the word '_counter' (without surrounding spaces)"
+difficulty = "beginner"
+tags = ["text-object", "word", "deletion", "inner"]
+
+[hints]
+generic = "Delete just the word itself, not surrounding whitespace"
+helix = "Move cursor anywhere in '_counter', press 'miw' to select inner word, press 'd' to delete"
+
+[content]
+starting = "private int _counter = 0;"
+target = "private int  = 0;"

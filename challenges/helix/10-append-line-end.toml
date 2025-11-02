@@ -1,0 +1,14 @@
+[metadata]
+id = "append-line-end-10"
+title = "Append at Line End"
+description = "Add ' // TODO: Implement' at the end of the line"
+difficulty = "beginner"
+tags = ["movement", "insertion", "line-end"]
+
+[hints]
+generic = "Jump to the end of the line and append text"
+helix = "Press 'A' (capital A) to append at line end, type ' // TODO: Implement', press Escape"
+
+[content]
+starting = "public void ProcessData() { }"
+target = "public void ProcessData() { } // TODO: Implement"

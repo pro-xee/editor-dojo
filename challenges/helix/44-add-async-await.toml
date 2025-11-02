@@ -1,0 +1,18 @@
+[metadata]
+id = "add-async-await-44"
+title = "Add Async/Await to Method"
+description = "Convert method to async and add await to method call"
+difficulty = "beginner"
+tags = ["csharp", "async", "await", "refactor"]
+
+[hints]
+generic = "Add 'async' before return type and 'await' before method call"
+helix = "Move to 'Task', press 'P' to paste 'async ' (after copying/typing), move inside method, add 'await ' before GetData"
+
+[content]
+starting = """public Task<string> ProcessData() {
+    return GetDataAsync();
+}"""
+target = """public async Task<string> ProcessData() {
+    return await GetDataAsync();
+}"""

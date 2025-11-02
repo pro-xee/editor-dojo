@@ -1,0 +1,14 @@
+[metadata]
+id = "property-to-expression-43"
+title = "Convert Property to Expression Body"
+description = "Convert the get-only property to expression-bodied syntax"
+difficulty = "beginner"
+tags = ["csharp", "property", "refactor", "expression-body"]
+
+[hints]
+generic = "Replace the property body with an expression body (=>)"
+helix = "Move to '{', press 'ma{' to select around braces, press 'c' to change, type '=> _name;', press Escape"
+
+[content]
+starting = "public string Name { get { return _name; } }"
+target = "public string Name => _name;"

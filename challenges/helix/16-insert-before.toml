@@ -1,0 +1,14 @@
+[metadata]
+id = "insert-before-16"
+title = "Insert Before Cursor"
+description = "Add 'readonly ' before 'string'"
+difficulty = "beginner"
+tags = ["insertion", "basic"]
+
+[hints]
+generic = "Position cursor and insert text before it"
+helix = "Move cursor to 's' in 'string', press 'i' to insert, type 'readonly ', press Escape"
+
+[content]
+starting = "private string _name;"
+target = "private readonly string _name;"

@@ -1,0 +1,14 @@
+[metadata]
+id = "word-end-06"
+title = "Navigate to Word Endings"
+description = "Move to the end of 'string' and append '?'"
+difficulty = "beginner"
+tags = ["movement", "word-end", "insertion"]
+
+[hints]
+generic = "Navigate to the end of the word and append a character"
+helix = "Use 'e' to jump to word endings, then 'a' to append after cursor, type '?', press Escape"
+
+[content]
+starting = "string name = GetName();"
+target = "string? name = GetName();"

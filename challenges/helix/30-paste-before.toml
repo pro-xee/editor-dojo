@@ -1,0 +1,14 @@
+[metadata]
+id = "paste-before-30"
+title = "Paste Before Cursor"
+description = "Delete 'async' and paste it before 'Task'"
+difficulty = "beginner"
+tags = ["deletion", "paste", "movement"]
+
+[hints]
+generic = "Delete a word and paste it before another position"
+helix = "Move to 'async', press 'wd' to delete word, move to 'T' in Task, press 'P' to paste before"
+
+[content]
+starting = "public Task async ProcessAsync()"
+target = "public async Task ProcessAsync()"

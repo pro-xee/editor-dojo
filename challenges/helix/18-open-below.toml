@@ -1,0 +1,15 @@
+[metadata]
+id = "open-below-18"
+title = "Open Line Below"
+description = "Add a new line below with the content '    return _count;'"
+difficulty = "beginner"
+tags = ["insertion", "line", "open"]
+
+[hints]
+generic = "Open a new line below the current line and enter insert mode"
+helix = "Position on the first line, press 'o' to open line below, type '    return _count;', press Escape"
+
+[content]
+starting = "public int GetCount() {"
+target = """public int GetCount() {
+    return _count;"""

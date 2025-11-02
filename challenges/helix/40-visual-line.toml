@@ -1,0 +1,20 @@
+[metadata]
+id = "visual-line-40"
+title = "Visual Line Selection"
+description = "Select and delete the two comment lines"
+difficulty = "beginner"
+tags = ["visual", "line", "deletion"]
+
+[hints]
+generic = "Enter visual line mode to select entire lines, then delete"
+helix = "Move to first comment, press 'V' (capital V) for visual line mode, press 'j' to extend to next line, press 'd' to delete"
+
+[content]
+starting = """public class MyClass {
+    // Comment line 1
+    // Comment line 2
+    private int _value;
+}"""
+target = """public class MyClass {
+    private int _value;
+}"""

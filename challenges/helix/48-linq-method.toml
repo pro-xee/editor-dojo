@@ -1,0 +1,14 @@
+[metadata]
+id = "linq-method-48"
+title = "Add LINQ Method Chain"
+description = "Add '.Where(x => x.IsActive)' before .ToList()"
+difficulty = "beginner"
+tags = ["csharp", "linq", "method-chain"]
+
+[hints]
+generic = "Find the position before .ToList() and insert the Where clause"
+helix = "Move to '.ToList', press 'i' to insert, type '.Where(x => x.IsActive)', press Escape"
+
+[content]
+starting = "var users = repository.GetAll().ToList();"
+target = "var users = repository.GetAll().Where(x => x.IsActive).ToList();"

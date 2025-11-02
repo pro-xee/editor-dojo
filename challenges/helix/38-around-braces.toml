@@ -1,0 +1,14 @@
+[metadata]
+id = "around-braces-38"
+title = "Change Around Braces"
+description = "Replace the entire property definition with '=> 42;'"
+difficulty = "beginner"
+tags = ["text-object", "braces", "change", "around"]
+
+[hints]
+generic = "Change the braces and everything inside them"
+helix = "Move cursor to/inside braces, press 'ma{' to select around braces, press 'c' to change, type '=> 42;', press Escape"
+
+[content]
+starting = "public int GetValue() { return _value; }"
+target = "public int GetValue() => 42;"

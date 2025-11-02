@@ -1,0 +1,14 @@
+[metadata]
+id = "insert-line-start-09"
+title = "Insert at Line Start (First Non-Blank)"
+description = "Add 'await ' before the method call"
+difficulty = "beginner"
+tags = ["movement", "insertion", "line-navigation"]
+
+[hints]
+generic = "Jump to first non-blank character and insert text"
+helix = "Press 'I' (capital I) to insert at first non-blank character, type 'await ', press Escape"
+
+[content]
+starting = "    var result = GetDataAsync();"
+target = "    var result = await GetDataAsync();"

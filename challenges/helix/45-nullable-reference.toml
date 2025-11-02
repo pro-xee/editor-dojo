@@ -1,0 +1,14 @@
+[metadata]
+id = "nullable-reference-45"
+title = "Add Nullable Reference Types"
+description = "Make all string parameters nullable"
+difficulty = "beginner"
+tags = ["csharp", "nullable", "types"]
+
+[hints]
+generic = "Add '?' after each 'string' type to make them nullable"
+helix = "Use 'f' to find each 'g' at end of 'string', press 'a' to append, type '?', press Escape, repeat with ';' for next occurrence"
+
+[content]
+starting = "public void Process(string firstName, string lastName)"
+target = "public void Process(string? firstName, string? lastName)"

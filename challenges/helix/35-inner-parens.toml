@@ -1,0 +1,14 @@
+[metadata]
+id = "inner-parens-35"
+title = "Delete Inner Parentheses"
+description = "Remove all parameters from the method call"
+difficulty = "beginner"
+tags = ["text-object", "parentheses", "deletion", "inner"]
+
+[hints]
+generic = "Delete everything inside parentheses"
+helix = "Move cursor inside parentheses, press 'mi(' to select inner parentheses, press 'd' to delete"
+
+[content]
+starting = "Console.WriteLine(name, age, email);"
+target = "Console.WriteLine();"

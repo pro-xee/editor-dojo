@@ -1,0 +1,14 @@
+[metadata]
+id = "change-word-24"
+title = "Change Word"
+description = "Change 'int' to 'long'"
+difficulty = "beginner"
+tags = ["change", "word", "modification"]
+
+[hints]
+generic = "Delete a word and enter insert mode"
+helix = "Move cursor to 'int', press 'cw' to change word, type 'long', press Escape"
+
+[content]
+starting = "private int _maxValue;"
+target = "private long _maxValue;"

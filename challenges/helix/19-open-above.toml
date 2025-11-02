@@ -1,0 +1,15 @@
+[metadata]
+id = "open-above-19"
+title = "Open Line Above"
+description = "Add a new line above with '[Obsolete]'"
+difficulty = "beginner"
+tags = ["insertion", "line", "open"]
+
+[hints]
+generic = "Open a new line above the current line and enter insert mode"
+helix = "Position on the method line, press 'O' (capital O) to open line above, type '[Obsolete]', press Escape"
+
+[content]
+starting = "public void OldMethod() { }"
+target = """[Obsolete]
+public void OldMethod() { }"""

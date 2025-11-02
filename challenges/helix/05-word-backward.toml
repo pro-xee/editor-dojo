@@ -1,0 +1,14 @@
+[metadata]
+id = "word-backward-05"
+title = "Navigate Backward by Words"
+description = "Start at the semicolon and move backward to delete 'static'"
+difficulty = "beginner"
+tags = ["movement", "word-navigation", "deletion"]
+
+[hints]
+generic = "Move backward by words to reach the target, then delete it"
+helix = "Position cursor at end, use 'b' to move backward by words, then 'wd' to delete"
+
+[content]
+starting = "public static void Main(string[] args);"
+target = "public void Main(string[] args);"

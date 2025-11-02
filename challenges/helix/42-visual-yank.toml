@@ -1,0 +1,15 @@
+[metadata]
+id = "visual-yank-42"
+title = "Visual Selection and Copy"
+description = "Copy 'public string Name' and paste it on the next line"
+difficulty = "beginner"
+tags = ["visual", "selection", "yank", "copy"]
+
+[hints]
+generic = "Use visual mode to select text, copy it, and paste"
+helix = "Move to 'p' in public, press 'v', extend to end of 'Name', press 'y' to yank, press 'o' to open line below, paste with 'p', press Escape"
+
+[content]
+starting = "public string Name { get; set; }"
+target = """public string Name { get; set; }
+public string Name"""
