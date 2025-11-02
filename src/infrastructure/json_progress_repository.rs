@@ -1,5 +1,5 @@
 use crate::application::ProgressRepository;
-use crate::domain::{ChallengeStats, Progress};
+use crate::domain::{AchievementId, ChallengeStats, Progress, UnlockedAchievement};
 use anyhow::{Context, Result};
 use chrono::{DateTime, NaiveDate, Utc};
 use serde::{Deserialize, Serialize};
@@ -117,6 +117,8 @@ struct ProgressDto {
     last_practice_date: Option<String>,
     longest_streak: u32,
     challenges: HashMap<String, ChallengeStatsDto>,
+    #[serde(default)]
+    unlocked_achievements: Vec<UnlockedAchievementDto>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -129,6 +131,12 @@ struct ChallengeStatsDto {
     attempt_count: u32,
 }
 
+#[derive(Debug, Serialize, Deserialize)]
+struct UnlockedAchievementDto {
+    id: AchievementId,
+    unlocked_at: String,
+}
+
 impl ProgressDto {
     fn from_domain(progress: &Progress) -> Self {
         let challenges = progress
@@ -137,12 +145,19 @@ impl ProgressDto {
             .map(|(id, stats)| (id.clone(), ChallengeStatsDto::from_domain(stats)))
             .collect();
 
+        let unlocked_achievements = progress
+            .unlocked_achievements()
+            .iter()
+            .map(|a| UnlockedAchievementDto::from_domain(a))
+            .collect();
+
         Self {
             editor_preference: progress.editor_preference().map(|s| s.to_string()),
             total_practice_time_secs: progress.total_practice_time().as_secs(),
             last_practice_date: progress.last_practice_date().map(|d| d.to_string()),
             longest_streak: progress.longest_streak(),
             challenges,
+            unlocked_achievements,
         }
     }
 
@@ -157,12 +172,20 @@ impl ProgressDto {
             .last_practice_date
             .and_then(|s| NaiveDate::parse_from_str(&s, "%Y-%m-%d").ok());
 
+        let unlocked_achievements = self
+            .unlocked_achievements
+            .into_iter()
+            .filter_map(|dto| dto.to_domain())
+            .map(|a| (a.id(), a))
+            .collect();
+
         Progress::with_values(
             challenge_stats,
             Duration::from_secs(self.total_practice_time_secs),
             last_practice_date,
             self.longest_streak,
             self.editor_preference,
+            unlocked_achievements,
         )
     }
 }
@@ -222,6 +245,21 @@ impl ChallengeStatsDto {
         }
 
         stats
+    }
+}
+
+impl UnlockedAchievementDto {
+    fn from_domain(achievement: &UnlockedAchievement) -> Self {
+        Self {
+            id: achievement.id(),
+            unlocked_at: achievement.unlocked_at().to_rfc3339(),
+        }
+    }
+
+    fn to_domain(self) -> Option<UnlockedAchievement> {
+        DateTime::parse_from_rfc3339(&self.unlocked_at)
+            .ok()
+            .map(|dt| UnlockedAchievement::new(self.id, dt.with_timezone(&Utc)))
     }
 }
 

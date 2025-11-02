@@ -6,7 +6,7 @@ mod ui;
 use anyhow::{Context, Result};
 use std::io::{self, Write};
 
-use application::{ChallengeRunner, ProgressTracker};
+use application::{AchievementChecker, ChallengeRunner, ProgressTracker};
 use domain::Challenge;
 use infrastructure::{
     AsciinemaRecorder, ChallengeLoader, FileChangeWatcher, HelixEditor, JsonProgressRepository,
@@ -65,7 +65,9 @@ fn main() -> Result<()> {
             }
             MenuAction::BrowseChallenges => {
                 // Show challenge list without starting one
-                let list_screen = ChallengeListScreen::new(challenges.clone());
+                let progress = progress_tracker.get_progress();
+                let list_screen = ChallengeListScreen::new(challenges.clone())
+                    .with_progress(progress);
                 let _ = list_screen.show();
             }
             MenuAction::Settings => {
@@ -120,8 +122,12 @@ fn run_training<R: application::ProgressRepository>(
     progress_tracker: &ProgressTracker<R>,
     use_recording: bool,
 ) -> Result<()> {
-    // Show challenge list screen
-    let list_screen = ChallengeListScreen::new(challenges.to_vec());
+    let total_challenges = challenges.len();
+
+    // Show challenge list screen with progress
+    let progress = progress_tracker.get_progress();
+    let list_screen = ChallengeListScreen::new(challenges.to_vec())
+        .with_progress(progress);
     let selected_challenge = list_screen
         .show()
         .context("Failed to display challenge list screen")?;
@@ -134,14 +140,15 @@ fn run_training<R: application::ProgressRepository>(
     };
 
     // Show challenge brief screen
-    let challenge_screen = ChallengeScreen::new();
-    let should_continue = challenge_screen
+    let mut challenge_screen = ChallengeScreen::new();
+    let challenge_mode = challenge_screen
         .show(&challenge)
         .context("Failed to display challenge screen")?;
 
-    if !should_continue {
-        return Ok(());
-    }
+    let challenge_mode = match challenge_mode {
+        Some(mode) => mode,
+        None => return Ok(()),
+    };
 
     // Dependency injection: create concrete implementations
     let editor = HelixEditor::new();
@@ -160,16 +167,33 @@ fn run_training<R: application::ProgressRepository>(
     // Run the challenge
     let solution = runner.run(&challenge).context("Failed to run challenge")?;
 
-    // Record the solution in progress tracker
-    progress_tracker
-        .record_solution(challenge.id(), &solution)
-        .context("Failed to record progress")?;
+    // Only record progress and check achievements in challenge mode (not practice mode)
+    let newly_unlocked = if !challenge_mode.practice_mode {
+        // Record the solution in progress tracker
+        progress_tracker
+            .record_solution(challenge.id(), &solution)
+            .context("Failed to record progress")?;
 
-    // Show results screen
+        // Check for new achievements
+        progress_tracker
+            .check_achievements(total_challenges)
+            .context("Failed to check achievements")?
+    } else {
+        // Practice mode - no recording
+        Vec::new()
+    };
+
+    // Show results screen with achievements
     let results_screen = ResultsScreen::new();
-    results_screen
-        .show(&solution)
-        .context("Failed to display results screen")?;
+    if !newly_unlocked.is_empty() {
+        results_screen
+            .show_with_achievements(&solution, newly_unlocked)
+            .context("Failed to display results screen")?;
+    } else {
+        results_screen
+            .show(&solution)
+            .context("Failed to display results screen")?;
+    }
 
     Ok(())
 }

@@ -1,6 +1,7 @@
 use crate::domain::challenge_stats::ChallengeStats;
+use crate::domain::achievement::{AchievementId, UnlockedAchievement};
 use chrono::{DateTime, NaiveDate, Utc};
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 use std::time::Duration;
 
 /// Entity representing user's overall progress
@@ -11,6 +12,7 @@ pub struct Progress {
     last_practice_date: Option<NaiveDate>,
     longest_streak: u32,
     editor_preference: Option<String>,
+    unlocked_achievements: HashMap<AchievementId, UnlockedAchievement>,
 }
 
 impl Progress {
@@ -22,6 +24,7 @@ impl Progress {
             last_practice_date: None,
             longest_streak: 0,
             editor_preference: None,
+            unlocked_achievements: HashMap::new(),
         }
     }
 
@@ -32,6 +35,7 @@ impl Progress {
         last_practice_date: Option<NaiveDate>,
         longest_streak: u32,
         editor_preference: Option<String>,
+        unlocked_achievements: HashMap<AchievementId, UnlockedAchievement>,
     ) -> Self {
         Self {
             challenge_stats,
@@ -39,6 +43,7 @@ impl Progress {
             last_practice_date,
             longest_streak,
             editor_preference,
+            unlocked_achievements,
         }
     }
 
@@ -222,6 +227,35 @@ impl Progress {
         });
 
         completed.into_iter().take(limit).collect()
+    }
+
+    /// Unlock an achievement
+    pub fn unlock_achievement(&mut self, id: AchievementId, unlocked_at: DateTime<Utc>) {
+        if !self.unlocked_achievements.contains_key(&id) {
+            self.unlocked_achievements.insert(id, UnlockedAchievement::new(id, unlocked_at));
+        }
+    }
+
+    /// Check if an achievement is unlocked
+    pub fn is_achievement_unlocked(&self, id: AchievementId) -> bool {
+        self.unlocked_achievements.contains_key(&id)
+    }
+
+    /// Get all unlocked achievements
+    pub fn unlocked_achievements(&self) -> Vec<&UnlockedAchievement> {
+        let mut achievements: Vec<_> = self.unlocked_achievements.values().collect();
+        achievements.sort_by_key(|a| a.unlocked_at());
+        achievements
+    }
+
+    /// Get count of unlocked achievements
+    pub fn achievement_count(&self) -> usize {
+        self.unlocked_achievements.len()
+    }
+
+    /// Get all unlocked achievement IDs as a set
+    pub fn unlocked_achievement_ids(&self) -> HashSet<AchievementId> {
+        self.unlocked_achievements.keys().copied().collect()
     }
 }
 

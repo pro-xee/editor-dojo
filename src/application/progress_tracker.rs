@@ -1,5 +1,5 @@
-use crate::application::ProgressRepository;
-use crate::domain::{ChallengeStats, Progress, Solution};
+use crate::application::{AchievementChecker, ProgressRepository};
+use crate::domain::{Achievement, ChallengeStats, Progress, Solution};
 use anyhow::Result;
 use chrono::Utc;
 use std::sync::{Arc, Mutex};
@@ -78,6 +78,18 @@ impl<R: ProgressRepository> ProgressTracker<R> {
     pub fn save(&self) -> Result<()> {
         let progress = self.progress.lock().unwrap();
         self.repository.save(&progress)
+    }
+
+    /// Check for new achievements and update progress
+    pub fn check_achievements(&self, total_challenges: usize) -> Result<Vec<Achievement>> {
+        let mut progress = self.progress.lock().unwrap();
+        let newly_unlocked = AchievementChecker::check_achievements(&mut *progress, total_challenges);
+
+        if !newly_unlocked.is_empty() {
+            self.repository.save(&progress)?;
+        }
+
+        Ok(newly_unlocked)
     }
 }
 

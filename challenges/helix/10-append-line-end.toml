@@ -8,6 +8,11 @@ tags = ["movement", "insertion", "line-end"]
 [hints]
 generic = "Jump to the end of the line and append text"
 helix = "Press 'A' (capital A) to append at line end, type ' // TODO: Implement', press Escape"
+hint_1 = "Line end operations: There are shortcuts to jump to the end and start inserting"
+hint_2 = "Capital 'A' in Helix: Jumps to line end AND enters insert mode in one keystroke"
+hint_3 = "Complete solution: Press 'A', type ' // TODO: Implement', then Escape"
+optimal_solution = "A // TODO: Implement\x1b"
+optimal_keystrokes = 23
 
 [content]
 starting = "public void ProcessData() { }"

@@ -37,6 +37,16 @@ struct Hints {
     generic: Option<String>,
     #[serde(default)]
     helix: Option<String>,
+    #[serde(default)]
+    hint_1: Option<String>,
+    #[serde(default)]
+    hint_2: Option<String>,
+    #[serde(default)]
+    hint_3: Option<String>,
+    #[serde(default)]
+    optimal_solution: Option<String>,
+    #[serde(default)]
+    optimal_keystrokes: Option<u32>,
 }
 
 #[derive(Debug, Deserialize)]
@@ -69,6 +79,27 @@ impl TomlChallenge {
 
         if !self.metadata.tags.is_empty() {
             challenge = challenge.with_tags(self.metadata.tags);
+        }
+
+        // Collect progressive hints
+        let mut progressive_hints = Vec::new();
+        if let Some(hint_1) = self.hints.hint_1 {
+            progressive_hints.push(hint_1);
+        }
+        if let Some(hint_2) = self.hints.hint_2 {
+            progressive_hints.push(hint_2);
+        }
+        if let Some(hint_3) = self.hints.hint_3 {
+            progressive_hints.push(hint_3);
+        }
+
+        if !progressive_hints.is_empty() {
+            challenge = challenge.with_progressive_hints(progressive_hints);
+        }
+
+        // Add optimal solution if provided
+        if let (Some(solution), Some(keystrokes)) = (self.hints.optimal_solution, self.hints.optimal_keystrokes) {
+            challenge = challenge.with_optimal_solution(solution, keystrokes);
         }
 
         challenge
