@@ -1,0 +1,14 @@
+[metadata]
+id = "change-to-line-end-26"
+title = "Change to End of Line"
+description = "Change the method signature return type and name"
+difficulty = "beginner"
+tags = ["change", "line-end", "modification"]
+
+[hints]
+generic = "Delete from cursor to end of line and enter insert mode"
+helix = "Move cursor to 'void', press 'C' to change to line end, type 'Task ProcessAsync()', press Escape"
+
+[content]
+starting = "public void Process()"
+target = "public Task ProcessAsync()"

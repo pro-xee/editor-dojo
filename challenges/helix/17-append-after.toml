@@ -1,0 +1,14 @@
+[metadata]
+id = "append-after-17"
+title = "Append After Cursor"
+description = "Add '?' after 'string' to make it nullable"
+difficulty = "beginner"
+tags = ["insertion", "append", "basic"]
+
+[hints]
+generic = "Position cursor and append text after it"
+helix = "Move cursor to 'g' in 'string', press 'a' to append, type '?', press Escape"
+
+[content]
+starting = "public string Name { get; set; }"
+target = "public string? Name { get; set; }"

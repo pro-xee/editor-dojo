@@ -1,0 +1,14 @@
+[metadata]
+id = "visual-select-39"
+title = "Visual Character Selection"
+description = "Select 'readonly ' and delete it"
+difficulty = "beginner"
+tags = ["visual", "selection", "deletion"]
+
+[hints]
+generic = "Enter visual mode to select characters, then delete"
+helix = "Move to 'r' in readonly, press 'v' to enter visual mode, press 'w' to extend selection, press 'd' to delete"
+
+[content]
+starting = "private readonly string _name;"
+target = "private string _name;"

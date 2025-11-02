@@ -1,0 +1,14 @@
+[metadata]
+id = "constructor-parameter-49"
+title = "Add Constructor Parameter"
+description = "Add 'ILogger logger' parameter to constructor"
+difficulty = "beginner"
+tags = ["csharp", "constructor", "parameter"]
+
+[hints]
+generic = "Add a second parameter with proper comma separation"
+helix = "Move to ')' before closing paren, press 'i' to insert, type ', ILogger logger', press Escape"
+
+[content]
+starting = "public MyService(IRepository repository)"
+target = "public MyService(IRepository repository, ILogger logger)"

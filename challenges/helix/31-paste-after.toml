@@ -1,0 +1,14 @@
+[metadata]
+id = "paste-after-31"
+title = "Paste After Cursor"
+description = "Copy 'set;' and paste it after the getter"
+difficulty = "beginner"
+tags = ["yank", "copy", "paste"]
+
+[hints]
+generic = "Copy text and paste it after cursor position"
+helix = "Move to 'set', select 'set;' with 'vf;', press 'y' to yank, move to '}' after get, press 'p' to paste after"
+
+[content]
+starting = "public int Count { get; set; }"
+target = "public int Count { get; set; set; }"

@@ -1,0 +1,14 @@
+[metadata]
+id = "first-non-blank-08"
+title = "Jump to First Non-Blank Character"
+description = "Navigate to 'if' and change it to 'while'"
+difficulty = "beginner"
+tags = ["movement", "line-navigation", "change"]
+
+[hints]
+generic = "Move to the first non-whitespace character on the line"
+helix = "Press '^' to jump to first non-blank character, then 'cw' to change word, type 'while', press Escape"
+
+[content]
+starting = "    if (condition)"
+target = "    while (condition)"

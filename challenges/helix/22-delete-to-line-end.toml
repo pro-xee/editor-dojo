@@ -1,0 +1,14 @@
+[metadata]
+id = "delete-to-line-end-22"
+title = "Delete to End of Line"
+description = "Remove the default value initialization"
+difficulty = "beginner"
+tags = ["deletion", "line-end"]
+
+[hints]
+generic = "Delete from cursor position to the end of the line"
+helix = "Move cursor to '=' character, press 'D' to delete to end of line"
+
+[content]
+starting = "private int _counter = 0;"
+target = "private int _counter"

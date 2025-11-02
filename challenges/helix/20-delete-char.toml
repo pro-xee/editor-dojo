@@ -1,0 +1,14 @@
+[metadata]
+id = "delete-char-20"
+title = "Delete Character Under Cursor"
+description = "Delete the '?' to make the string non-nullable"
+difficulty = "beginner"
+tags = ["deletion", "character"]
+
+[hints]
+generic = "Delete the character under the cursor"
+helix = "Move cursor to '?', press 'x' to delete character"
+
+[content]
+starting = "string? name = null;"
+target = "string name = null;"

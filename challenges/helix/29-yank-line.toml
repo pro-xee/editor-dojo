@@ -1,0 +1,15 @@
+[metadata]
+id = "yank-line-29"
+title = "Copy (Yank) a Line"
+description = "Duplicate the property declaration"
+difficulty = "beginner"
+tags = ["yank", "copy", "paste", "line"]
+
+[hints]
+generic = "Copy an entire line and paste it"
+helix = "Position on the line, press 'yy' to yank line, press 'p' to paste below"
+
+[content]
+starting = "public string Name { get; set; }"
+target = """public string Name { get; set; }
+public string Name { get; set; }"""

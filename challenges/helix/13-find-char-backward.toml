@@ -1,0 +1,14 @@
+[metadata]
+id = "find-char-backward-13"
+title = "Find Character Backward"
+description = "From the semicolon, find the opening parenthesis and delete it"
+difficulty = "beginner"
+tags = ["movement", "find", "deletion"]
+
+[hints]
+generic = "Find a character moving backward on the line"
+helix = "Position at end, press 'F(' to find '(' backward, then 'x' to delete character"
+
+[content]
+starting = "Console.WriteLine(message);"
+target = "Console.WriteLinemessage);"

@@ -1,0 +1,18 @@
+[metadata]
+id = "change-line-25"
+title = "Change Entire Line"
+description = "Replace the entire line with 'return true;'"
+difficulty = "beginner"
+tags = ["change", "line", "modification"]
+
+[hints]
+generic = "Delete the entire line and enter insert mode"
+helix = "Position cursor on the line, press 'cc' to change line, type 'return true;', press Escape"
+
+[content]
+starting = """public bool IsValid() {
+    return false;
+}"""
+target = """public bool IsValid() {
+    return true;
+}"""

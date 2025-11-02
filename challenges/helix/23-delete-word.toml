@@ -1,0 +1,14 @@
+[metadata]
+id = "delete-word-23"
+title = "Delete Word"
+description = "Delete the word 'static' from the method declaration"
+difficulty = "beginner"
+tags = ["deletion", "word"]
+
+[hints]
+generic = "Delete an entire word"
+helix = "Move cursor to 'static', press 'wd' to delete word (including trailing space)"
+
+[content]
+starting = "public static async Task ProcessAsync()"
+target = "public async Task ProcessAsync()"

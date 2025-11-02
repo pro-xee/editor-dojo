@@ -1,0 +1,14 @@
+[metadata]
+id = "replace-char-27"
+title = "Replace Single Character"
+description = "Replace the '=' with '+=' to change assignment to addition assignment"
+difficulty = "beginner"
+tags = ["replace", "character", "modification"]
+
+[hints]
+generic = "Replace a single character without entering insert mode"
+helix = "Move cursor to '=', press 'r' then '+' to replace with '+', move right and press 'a' to append '=', press Escape"
+
+[content]
+starting = "counter = 1;"
+target = "counter += 1;"

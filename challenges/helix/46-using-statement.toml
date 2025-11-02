@@ -1,0 +1,17 @@
+[metadata]
+id = "using-statement-46"
+title = "Convert to Using Declaration"
+description = "Convert using statement to using declaration (C# 8.0+)"
+difficulty = "beginner"
+tags = ["csharp", "using", "modern", "refactor"]
+
+[hints]
+generic = "Remove the braces and keep just the using declaration"
+helix = "Delete 'statement' after using, move to '{', press 'dd' to delete line with brace, navigate to closing '}' and delete it"
+
+[content]
+starting = """using (var stream = File.OpenRead(path)) {
+    ProcessStream(stream);
+}"""
+target = """using var stream = File.OpenRead(path);
+    ProcessStream(stream);"""

@@ -1,0 +1,14 @@
+[metadata]
+id = "word-forward-04"
+title = "Navigate Forward by Words"
+description = "Move to the word 'Console' and delete it"
+difficulty = "beginner"
+tags = ["movement", "word-navigation", "deletion"]
+
+[hints]
+generic = "Move forward by words until you reach the target, then delete it"
+helix = "Use 'w' to move forward by words, then 'wd' to delete the word"
+
+[content]
+starting = "int count = Console.ReadLine();"
+target = "int count = .ReadLine();"

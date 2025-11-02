@@ -1,0 +1,14 @@
+[metadata]
+id = "repeat-find-15"
+title = "Repeat Find Motion"
+description = "Find all underscores and delete them (there are three)"
+difficulty = "beginner"
+tags = ["movement", "find", "deletion", "repeat"]
+
+[hints]
+generic = "Find a character, then repeat the find motion to move to next occurrences"
+helix = "Press 'f_' to find first '_', press 'x' to delete, then ';x' twice more (';' repeats find, 'x' deletes)"
+
+[content]
+starting = "private string _user_name_value;"
+target = "private string usernamevalue;"

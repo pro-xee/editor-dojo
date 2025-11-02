@@ -1,0 +1,14 @@
+[metadata]
+id = "find-char-12"
+title = "Find Character Forward"
+description = "Find the '=' character and delete everything from there to the end of the line"
+difficulty = "beginner"
+tags = ["movement", "find", "deletion"]
+
+[hints]
+generic = "Find a character on the current line moving forward"
+helix = "Press 'f=' to find the '=' character, then 'D' to delete to end of line"
+
+[content]
+starting = "string name = GetDefaultName();"
+target = "string name"

@@ -1,0 +1,14 @@
+[metadata]
+id = "visual-change-41"
+title = "Visual Selection and Change"
+description = "Select 'string[]' and change it to 'List<string>'"
+difficulty = "beginner"
+tags = ["visual", "selection", "change"]
+
+[hints]
+generic = "Use visual mode to select text, then change it"
+helix = "Move to 's' in string[], press 'v', extend selection with motion keys to cover 'string[]', press 'c' to change, type 'List<string>', press Escape"
+
+[content]
+starting = "public void Process(string[] args)"
+target = "public void Process(List<string> args)"

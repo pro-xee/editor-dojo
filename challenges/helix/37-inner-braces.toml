@@ -1,0 +1,14 @@
+[metadata]
+id = "inner-braces-37"
+title = "Delete Inner Braces"
+description = "Clear the property body (remove 'get; set;')"
+difficulty = "beginner"
+tags = ["text-object", "braces", "deletion", "inner"]
+
+[hints]
+generic = "Delete everything inside the curly braces"
+helix = "Move cursor inside braces, press 'mi{' to select inner braces, press 'd' to delete"
+
+[content]
+starting = "public int Count { get; set; }"
+target = "public int Count {  }"

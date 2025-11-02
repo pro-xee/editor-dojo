@@ -1,0 +1,15 @@
+[metadata]
+id = "add-attribute-47"
+title = "Add Attribute to Property"
+description = "Add [JsonProperty(\"user_name\")] attribute above the property"
+difficulty = "beginner"
+tags = ["csharp", "attribute", "property"]
+
+[hints]
+generic = "Open a line above the property and add the attribute"
+helix = "Position on property line, press 'O' to open line above, type '[JsonProperty(\"user_name\")]', press Escape"
+
+[content]
+starting = "public string UserName { get; set; }"
+target = """[JsonProperty("user_name")]
+public string UserName { get; set; }"""

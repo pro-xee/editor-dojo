@@ -1,0 +1,19 @@
+[metadata]
+id = "goto-line-11"
+title = "Navigate to Specific Line"
+description = "Delete the second line (the empty line)"
+difficulty = "beginner"
+tags = ["movement", "line-navigation", "deletion"]
+
+[hints]
+generic = "Navigate to a specific line number and delete it"
+helix = "Press '2g' to go to line 2, then 'dd' to delete the line"
+
+[content]
+starting = """public class MyClass
+{
+    private int _value;
+}"""
+target = """public class MyClass
+    private int _value;
+}"""

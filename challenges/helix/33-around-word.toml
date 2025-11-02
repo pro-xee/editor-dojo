@@ -1,0 +1,14 @@
+[metadata]
+id = "around-word-33"
+title = "Delete Around Word"
+description = "Delete 'static' including trailing space"
+difficulty = "beginner"
+tags = ["text-object", "word", "deletion", "around"]
+
+[hints]
+generic = "Delete the word and surrounding whitespace"
+helix = "Move cursor to 'static', press 'maw' to select around word, press 'd' to delete"
+
+[content]
+starting = "public static void Main()"
+target = "public void Main()"

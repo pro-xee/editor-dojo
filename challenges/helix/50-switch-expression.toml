@@ -1,0 +1,21 @@
+[metadata]
+id = "switch-expression-50"
+title = "Edit Switch Expression"
+description = "Add '_ => \"Unknown\"' as the default case"
+difficulty = "beginner"
+tags = ["csharp", "switch", "expression", "pattern-matching"]
+
+[hints]
+generic = "Add a comma after the last case and add the default case"
+helix = "Move to end of '\"Large\"', press 'a' to append, type ',', press 'o' to open line, type '    _ => \"Unknown\"', press Escape"
+
+[content]
+starting = """var size = quantity switch {
+    < 10 => "Small",
+    < 100 => "Large"
+};"""
+target = """var size = quantity switch {
+    < 10 => "Small",
+    < 100 => "Large",
+    _ => "Unknown"
+};"""
