@@ -2,13 +2,13 @@ use anyhow::Result;
 use crossterm::event::{self, Event, KeyCode};
 use ratatui::{
     layout::{Alignment, Constraint, Direction, Layout},
-    style::{Color, Style},
-    text::Line,
+    style::{Color, Modifier, Style},
+    text::{Line, Span},
     widgets::{Block, Borders, Paragraph},
     Frame,
 };
 
-use crate::domain::Solution;
+use crate::domain::{Achievement, Solution};
 
 /// Renders the results screen after challenge completion
 pub struct ResultsScreen;
@@ -24,7 +24,7 @@ impl ResultsScreen {
         terminal.clear()?;
 
         loop {
-            terminal.draw(|frame| self.render(frame, solution))?;
+            terminal.draw(|frame| self.render(frame, solution, &[]))?;
 
             if let Event::Key(key) = event::read()? {
                 match key.code {
@@ -38,7 +38,27 @@ impl ResultsScreen {
         Ok(())
     }
 
-    fn render(&self, frame: &mut Frame, solution: &Solution) {
+    /// Displays results with achievement notifications
+    pub fn show_with_achievements(&self, solution: &Solution, achievements: Vec<Achievement>) -> Result<()> {
+        let mut terminal = ratatui::init();
+        terminal.clear()?;
+
+        loop {
+            terminal.draw(|frame| self.render(frame, solution, &achievements))?;
+
+            if let Event::Key(key) = event::read()? {
+                match key.code {
+                    KeyCode::Char(_) | KeyCode::Enter | KeyCode::Esc => break,
+                    _ => {}
+                }
+            }
+        }
+
+        ratatui::restore();
+        Ok(())
+    }
+
+    fn render(&self, frame: &mut Frame, solution: &Solution, achievements: &[Achievement]) {
         let area = frame.area();
 
         // Create vertical layout
@@ -93,6 +113,38 @@ impl ResultsScreen {
             content_lines.push(Line::from(format!("Recording: {}", path_display)));
             content_lines.push(Line::from(format!("Replay: asciinema play {}", path_display))
                 .style(Style::default().fg(Color::Cyan)));
+        }
+
+        // Add achievement notifications if any were unlocked
+        if !achievements.is_empty() {
+            content_lines.push(Line::from(""));
+            content_lines.push(Line::from(""));
+            content_lines.push(Line::from(vec![
+                Span::styled("🎉 NEW ACHIEVEMENT", Style::default()
+                    .fg(Color::Yellow)
+                    .add_modifier(Modifier::BOLD)),
+                Span::styled(if achievements.len() > 1 { "S" } else { "" }, Style::default()
+                    .fg(Color::Yellow)
+                    .add_modifier(Modifier::BOLD)),
+                Span::styled(" UNLOCKED! 🎉", Style::default()
+                    .fg(Color::Yellow)
+                    .add_modifier(Modifier::BOLD)),
+            ]));
+            content_lines.push(Line::from(""));
+
+            for achievement in achievements {
+                let achievement_line = Line::from(vec![
+                    Span::raw("  "),
+                    Span::raw(achievement.badge()),
+                    Span::raw("  "),
+                    Span::styled(achievement.name(), Style::default()
+                        .fg(Color::Green)
+                        .add_modifier(Modifier::BOLD)),
+                    Span::raw(" - "),
+                    Span::styled(achievement.description(), Style::default().fg(Color::White)),
+                ]);
+                content_lines.push(achievement_line);
+            }
         }
 
         content_lines.push(Line::from(""));

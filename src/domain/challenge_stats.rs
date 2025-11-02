@@ -1,5 +1,6 @@
 use chrono::{DateTime, Utc};
 use std::time::Duration;
+use crate::domain::MasteryTier;
 
 /// Value object representing statistics for a single challenge
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -118,6 +119,15 @@ impl ChallengeStats {
 
     pub fn attempt_count(&self) -> u32 {
         self.attempt_count
+    }
+
+    /// Get mastery tier for this challenge based on best performance
+    pub fn mastery_tier(&self) -> Option<MasteryTier> {
+        if !self.completed {
+            return None;
+        }
+
+        self.best_time.map(|time| MasteryTier::calculate(time, self.best_keystrokes))
     }
 }
 

@@ -6,7 +6,7 @@ mod ui;
 use anyhow::{Context, Result};
 use std::io::{self, Write};
 
-use application::{ChallengeRunner, ProgressTracker};
+use application::{AchievementChecker, ChallengeRunner, ProgressTracker};
 use domain::Challenge;
 use infrastructure::{
     AsciinemaRecorder, ChallengeLoader, FileChangeWatcher, HelixEditor, JsonProgressRepository,
@@ -122,6 +122,8 @@ fn run_training<R: application::ProgressRepository>(
     progress_tracker: &ProgressTracker<R>,
     use_recording: bool,
 ) -> Result<()> {
+    let total_challenges = challenges.len();
+
     // Show challenge list screen with progress
     let progress = progress_tracker.get_progress();
     let list_screen = ChallengeListScreen::new(challenges.to_vec())
@@ -169,11 +171,22 @@ fn run_training<R: application::ProgressRepository>(
         .record_solution(challenge.id(), &solution)
         .context("Failed to record progress")?;
 
-    // Show results screen
+    // Check for new achievements
+    let newly_unlocked = progress_tracker
+        .check_achievements(total_challenges)
+        .context("Failed to check achievements")?;
+
+    // Show results screen with achievements
     let results_screen = ResultsScreen::new();
-    results_screen
-        .show(&solution)
-        .context("Failed to display results screen")?;
+    if !newly_unlocked.is_empty() {
+        results_screen
+            .show_with_achievements(&solution, newly_unlocked)
+            .context("Failed to display results screen")?;
+    } else {
+        results_screen
+            .show(&solution)
+            .context("Failed to display results screen")?;
+    }
 
     Ok(())
 }
