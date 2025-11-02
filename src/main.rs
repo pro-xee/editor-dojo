@@ -65,7 +65,9 @@ fn main() -> Result<()> {
             }
             MenuAction::BrowseChallenges => {
                 // Show challenge list without starting one
-                let list_screen = ChallengeListScreen::new(challenges.clone());
+                let progress = progress_tracker.get_progress();
+                let list_screen = ChallengeListScreen::new(challenges.clone())
+                    .with_progress(progress);
                 let _ = list_screen.show();
             }
             MenuAction::Settings => {
@@ -120,8 +122,10 @@ fn run_training<R: application::ProgressRepository>(
     progress_tracker: &ProgressTracker<R>,
     use_recording: bool,
 ) -> Result<()> {
-    // Show challenge list screen
-    let list_screen = ChallengeListScreen::new(challenges.to_vec());
+    // Show challenge list screen with progress
+    let progress = progress_tracker.get_progress();
+    let list_screen = ChallengeListScreen::new(challenges.to_vec())
+        .with_progress(progress);
     let selected_challenge = list_screen
         .show()
         .context("Failed to display challenge list screen")?;
