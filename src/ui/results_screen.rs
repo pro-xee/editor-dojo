@@ -72,13 +72,32 @@ impl ResultsScreen {
 
         // Content
         let elapsed = solution.elapsed_seconds();
-        let content_text = vec![
+        let mut content_lines = vec![
             Line::from(""),
-            Line::from(format!("Time: {}:{}s", elapsed / 60, elapsed % 60)),
-            Line::from(""),
+            Line::from(format!("Time: {}:{:02}s", elapsed / 60, elapsed % 60)),
         ];
 
-        let content = Paragraph::new(content_text)
+        // Add recording information if available
+        if let Some(recording) = solution.recording() {
+            content_lines.push(Line::from(format!("Keystrokes: {}", recording.keystroke_count())));
+            content_lines.push(Line::from(""));
+            content_lines.push(Line::from("Key sequence:"));
+
+            // Display the key sequence in a formatted box
+            let key_sequence_text = recording.key_sequence().format_for_display(80);
+            content_lines.push(Line::from(format!("  {}", key_sequence_text)));
+            content_lines.push(Line::from(""));
+
+            // Show recording path (abbreviated for display)
+            let path_display = Self::abbreviate_path(&recording.file_path_display());
+            content_lines.push(Line::from(format!("Recording: {}", path_display)));
+            content_lines.push(Line::from(format!("Replay: asciinema play {}", path_display))
+                .style(Style::default().fg(Color::Cyan)));
+        }
+
+        content_lines.push(Line::from(""));
+
+        let content = Paragraph::new(content_lines)
             .alignment(Alignment::Center)
             .block(Block::default().borders(Borders::ALL));
         frame.render_widget(content, chunks[1]);
@@ -89,6 +108,16 @@ impl ResultsScreen {
             .alignment(Alignment::Center)
             .block(Block::default().borders(Borders::ALL));
         frame.render_widget(footer, chunks[2]);
+    }
+
+    /// Abbreviates a file path for display by replacing home directory with ~
+    fn abbreviate_path(path: &str) -> String {
+        if let Ok(home) = std::env::var("HOME") {
+            if let Some(rest) = path.strip_prefix(&home) {
+                return format!("~{}", rest);
+            }
+        }
+        path.to_string()
     }
 }
 

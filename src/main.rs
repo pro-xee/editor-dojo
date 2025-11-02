@@ -4,9 +4,13 @@ mod infrastructure;
 mod ui;
 
 use anyhow::{Context, Result};
+use std::io::{self, Write};
 
 use application::ChallengeRunner;
-use infrastructure::{ChallengeLoader, FileChangeWatcher, HelixEditor, LocalFileSystem, TomlChallengeLoader};
+use infrastructure::{
+    AsciinemaRecorder, ChallengeLoader, FileChangeWatcher, HelixEditor, LocalFileSystem,
+    Recorder, TomlChallengeLoader,
+};
 use ui::{ChallengeListScreen, ChallengeScreen, ResultsScreen};
 
 fn main() -> Result<()> {
@@ -16,6 +20,38 @@ fn main() -> Result<()> {
         eprintln!("Please install Helix from https://helix-editor.com/");
         std::process::exit(1);
     }
+
+    // Check if asciinema is installed (optional but recommended)
+    let use_recording = if !AsciinemaRecorder::is_available() {
+        eprintln!("\n┌─────────────────────────────────────────────┐");
+        eprintln!("│           Setup Recommended                 │");
+        eprintln!("├─────────────────────────────────────────────┤");
+        eprintln!("│                                             │");
+        eprintln!("│  asciinema is not installed.                │");
+        eprintln!("│                                             │");
+        eprintln!("│  Without it, you won't see:                 │");
+        eprintln!("│   - Keystroke counts                        │");
+        eprintln!("│   - Key sequence feedback                   │");
+        eprintln!("│   - Session recordings                      │");
+        eprintln!("│                                             │");
+        eprintln!("│  Install: https://asciinema.org/docs/       │");
+        eprintln!("│                                             │");
+        eprintln!("└─────────────────────────────────────────────┘");
+        eprint!("\nContinue without recording? [y/N] ");
+        io::stdout().flush()?;
+
+        let mut input = String::new();
+        io::stdin().read_line(&mut input)?;
+        let input = input.trim().to_lowercase();
+
+        if input != "y" && input != "yes" {
+            println!("Please install asciinema and try again.");
+            std::process::exit(0);
+        }
+        false
+    } else {
+        true
+    };
 
     // Load challenges from TOML files
     let loader = TomlChallengeLoader::new("challenges/helix");
@@ -53,6 +89,12 @@ fn main() -> Result<()> {
 
     // Create the challenge runner with injected dependencies
     let mut runner = ChallengeRunner::new(editor, watcher, filesystem);
+
+    // Add recorder if available
+    if use_recording {
+        let recorder = AsciinemaRecorder::new("hx");
+        runner = runner.with_recorder(Box::new(recorder));
+    }
 
     // Run the challenge
     let solution = runner.run(&challenge).context("Failed to run challenge")?;
