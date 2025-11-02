@@ -81,6 +81,9 @@ impl Progress {
         // Update total practice time
         self.total_practice_time += time;
 
+        // Update last practice date
+        self.last_practice_date = Some(attempted_date);
+
         // Update streak if this is a completion
         if completed {
             let current_streak = self.calculate_current_streak(attempted_date);
@@ -88,9 +91,6 @@ impl Progress {
                 self.longest_streak = current_streak;
             }
         }
-
-        // Update last practice date
-        self.last_practice_date = Some(attempted_date);
     }
 
     /// Calculate current streak based on last practice date
