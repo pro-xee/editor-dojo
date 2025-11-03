@@ -14,6 +14,7 @@ editor-dojo helps you practice and improve your text editing skills through inte
 - **Keystroke Recording**: Records your editing session with asciinema
 - **Key Sequence Display**: See exactly what keys you pressed to complete the challenge
 - **Session Replay**: Review your editing sessions with asciinema playback
+- **Result Integrity**: Cryptographic signing prevents tampering with results and recordings
 - **Clean Architecture**: Built with SOLID principles for easy extension
 
 ## Prerequisites
@@ -227,6 +228,49 @@ src/
     ├── challenge_screen.rs      # Challenge brief TUI
     └── results_screen.rs        # Results display with key sequences
 ```
+
+## Result Integrity System
+
+editor-dojo uses cryptographic signing to detect tampering with locally stored results and recordings.
+
+### How It Works
+
+- **Automatic Signing**: When you complete a challenge with a recording, the system automatically:
+  - Calculates a SHA256 hash of the recording file
+  - Creates an HMAC-SHA256 signature over the result data and recording hash
+  - Stores both with your progress
+
+- **Verification**: Results can be verified to ensure they haven't been tampered with
+- **Backwards Compatible**: Old results without signatures still work normally
+
+### Build Types
+
+**Development Builds** (local builds):
+- Use a public fallback signing key
+- Perfect for local development and testing
+- You'll see: `Building with DEVELOPMENT signing key (INSECURE)`
+
+**Production Builds** (official releases):
+- Built via GitHub Actions with a secret signing key
+- Results are cryptographically signed and verifiable
+- You'll see: `Building with PRODUCTION signing key`
+
+### Security Limitations
+
+This is a **tamper detection** system, not tamper prevention. It:
+
+✅ **Does**: Detect manual editing of result files or recordings
+✅ **Does**: Discourage casual cheating
+✅ **Does**: Support backwards compatibility with old data
+
+❌ **Does NOT**: Prevent a determined attacker from extracting the key
+❌ **Does NOT**: Provide server-side validation
+
+This is acceptable because editor-dojo is an educational tool for personal development, not a competitive platform with monetary stakes.
+
+### Learn More
+
+For detailed information about the integrity system, key rotation, and maintainer guidelines, see [INTEGRITY.md](INTEGRITY.md).
 
 ## Development
 

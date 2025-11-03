@@ -129,6 +129,13 @@ struct ChallengeStatsDto {
     first_completed_at: Option<String>,
     last_attempted_at: Option<String>,
     attempt_count: u32,
+    // Integrity fields (optional for backwards compatibility)
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    recording_hash: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    signature: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    signature_version: Option<u32>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -203,6 +210,9 @@ impl ChallengeStatsDto {
                 .last_attempted_at()
                 .map(|dt| dt.to_rfc3339()),
             attempt_count: stats.attempt_count(),
+            recording_hash: stats.recording_hash().map(|s| s.to_string()),
+            signature: stats.signature().map(|s| s.to_string()),
+            signature_version: stats.signature_version(),
         }
     }
 
@@ -242,6 +252,12 @@ impl ChallengeStatsDto {
                     attempt_at,
                 );
             }
+        }
+
+        // Add integrity data if present
+        if let (Some(hash), Some(sig), Some(ver)) =
+            (self.recording_hash, self.signature, self.signature_version) {
+            stats = stats.with_integrity(hash, sig, ver);
         }
 
         stats

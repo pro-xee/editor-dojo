@@ -98,6 +98,20 @@ impl Progress {
         }
     }
 
+    /// Update challenge stats with integrity data (signature and recording hash)
+    pub fn update_challenge_integrity(
+        &mut self,
+        challenge_id: &str,
+        recording_hash: String,
+        signature: String,
+        signature_version: u32,
+    ) {
+        if let Some(stats) = self.challenge_stats.get(challenge_id) {
+            let updated = stats.clone().with_integrity(recording_hash, signature, signature_version);
+            self.challenge_stats.insert(challenge_id.to_string(), updated);
+        }
+    }
+
     /// Calculate current streak based on last practice date
     pub fn calculate_current_streak(&self, today: NaiveDate) -> u32 {
         if self.last_practice_date.is_none() {

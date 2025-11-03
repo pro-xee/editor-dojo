@@ -11,7 +11,7 @@ pub use challenge::Challenge;
 pub use solution::Solution;
 pub use key_sequence::KeySequence;
 pub use recording::Recording;
-pub use challenge_stats::ChallengeStats;
+pub use challenge_stats::{ChallengeStats, VerificationStatus};
 pub use progress::Progress;
 pub use mastery_tier::MasteryTier;
 pub use achievement::{Achievement, AchievementId, UnlockedAchievement};

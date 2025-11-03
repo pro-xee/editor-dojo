@@ -2,6 +2,21 @@ use chrono::{DateTime, Utc};
 use std::time::Duration;
 use crate::domain::MasteryTier;
 
+/// Verification status for integrity checking
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum VerificationStatus {
+    /// Result has no signature (legacy data, backwards compatible)
+    Legacy,
+    /// Result has signature but not yet verified
+    Unverified,
+    /// Result signature and recording hash verified successfully
+    Verified,
+    /// Result signature verification failed (data tampered)
+    SignatureFailed,
+    /// Recording hash verification failed (file modified)
+    RecordingHashFailed,
+}
+
 /// Value object representing statistics for a single challenge
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct ChallengeStats {
@@ -12,6 +27,13 @@ pub struct ChallengeStats {
     first_completed_at: Option<DateTime<Utc>>,
     last_attempted_at: Option<DateTime<Utc>>,
     attempt_count: u32,
+    // Integrity fields (optional for backwards compatibility)
+    recording_hash: Option<String>,
+    signature: Option<String>,
+    signature_version: Option<u32>,
+    // Verification status (not persisted, computed at runtime)
+    #[allow(dead_code)]
+    verification_status: VerificationStatus,
 }
 
 impl ChallengeStats {
@@ -25,6 +47,10 @@ impl ChallengeStats {
             first_completed_at: None,
             last_attempted_at: None,
             attempt_count: 0,
+            recording_hash: None,
+            signature: None,
+            signature_version: None,
+            verification_status: VerificationStatus::Legacy,
         }
     }
 
@@ -43,6 +69,10 @@ impl ChallengeStats {
             first_completed_at: Some(completed_at),
             last_attempted_at: Some(completed_at),
             attempt_count: 1,
+            recording_hash: None,
+            signature: None,
+            signature_version: None,
+            verification_status: VerificationStatus::Legacy,
         }
     }
 
@@ -128,6 +158,53 @@ impl ChallengeStats {
         }
 
         self.best_time.map(|time| MasteryTier::calculate(time, self.best_keystrokes))
+    }
+
+    // Integrity field getters
+    pub fn recording_hash(&self) -> Option<&str> {
+        self.recording_hash.as_deref()
+    }
+
+    pub fn signature(&self) -> Option<&str> {
+        self.signature.as_deref()
+    }
+
+    pub fn signature_version(&self) -> Option<u32> {
+        self.signature_version
+    }
+
+    /// Check if this result has integrity data (signature + hash)
+    pub fn has_integrity_data(&self) -> bool {
+        self.signature.is_some() && self.recording_hash.is_some()
+    }
+
+    /// Create a new instance with updated integrity data
+    pub fn with_integrity(
+        self,
+        recording_hash: String,
+        signature: String,
+        signature_version: u32,
+    ) -> Self {
+        Self {
+            recording_hash: Some(recording_hash),
+            signature: Some(signature),
+            signature_version: Some(signature_version),
+            verification_status: VerificationStatus::Unverified,
+            ..self
+        }
+    }
+
+    /// Get verification status
+    pub fn verification_status(&self) -> VerificationStatus {
+        self.verification_status
+    }
+
+    /// Create a new instance with updated verification status
+    pub fn with_verification_status(self, status: VerificationStatus) -> Self {
+        Self {
+            verification_status: status,
+            ..self
+        }
     }
 }
 
