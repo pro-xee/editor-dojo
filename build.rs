@@ -17,7 +17,7 @@ fn main() {
     // Validate key is hex and appropriate length (at least 32 bytes for security)
     let key_bytes = match hex::decode(&signing_key) {
         Ok(bytes) if bytes.len() >= 32 => bytes,
-        Ok(bytes) => {
+        Ok(_bytes) => {
             // Key is too short, pad or fail for production
             if env::var("SIGNING_KEY").is_ok() {
                 panic!("SIGNING_KEY must be at least 32 bytes (64 hex characters)");
@@ -42,9 +42,8 @@ fn main() {
 
     // Write the obfuscation key constant
     let key_code = format!(
-        "pub const OBFUSCATION_KEY: u8 = 0x{:02X};\npub const KEY_LENGTH: usize = {};\n",
-        obfuscation_key,
-        obfuscated.len()
+        "pub const OBFUSCATION_KEY: u8 = 0x{:02X};\n",
+        obfuscation_key
     );
     let key_const_path = Path::new(&out_dir).join("key_constants.rs");
     fs::write(&key_const_path, key_code).expect("Failed to write key constants");

@@ -21,6 +21,7 @@ impl JsonProgressRepository {
     }
 
     /// Create repository with custom path (useful for testing)
+    #[cfg(test)]
     pub fn with_path(file_path: PathBuf) -> Self {
         Self { file_path }
     }

@@ -6,7 +6,7 @@ mod ui;
 use anyhow::{Context, Result};
 use std::io::{self, Write};
 
-use application::{AchievementChecker, ChallengeRunner, ProgressTracker};
+use application::{ChallengeRunner, ProgressTracker};
 use domain::Challenge;
 use infrastructure::{
     AsciinemaRecorder, ChallengeLoader, FileChangeWatcher, HelixEditor, JsonProgressRepository,
@@ -27,6 +27,16 @@ fn main() -> Result<()> {
         .context("Failed to initialize progress repository")?;
     let progress_tracker = ProgressTracker::new(progress_repo)
         .context("Failed to load progress")?;
+
+    // Verify integrity of stored results
+    let recordings_dir = dirs::data_local_dir()
+        .context("Failed to get data directory")?
+        .join("editor-dojo")
+        .join("recordings");
+    if recordings_dir.exists() {
+        let _ = progress_tracker.verify_all_results(&recordings_dir);
+        // Ignore errors - verification is best-effort
+    }
 
     // Set default editor if not set
     let progress = progress_tracker.get_progress();

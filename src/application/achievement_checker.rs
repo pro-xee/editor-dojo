@@ -1,6 +1,5 @@
 use crate::domain::{Achievement, AchievementId, MasteryTier, Progress};
 use chrono::Utc;
-use std::collections::HashSet;
 
 /// Service for checking and unlocking achievements
 pub struct AchievementChecker;

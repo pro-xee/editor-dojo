@@ -193,7 +193,7 @@ impl<R: ProgressRepository> ProgressTracker<R> {
     /// Verify all challenge results in current progress
     /// Updates verification status for each challenge that has integrity data
     pub fn verify_all_results(&self, recordings_dir: &PathBuf) -> Result<()> {
-        let mut progress = self.progress.lock().unwrap();
+        let progress = self.progress.lock().unwrap();
 
         // Get all challenge stats and verify each one
         let challenge_ids: Vec<String> = progress

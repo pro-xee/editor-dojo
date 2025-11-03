@@ -1,6 +1,5 @@
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
-use std::time::Duration;
 
 /// Unique identifier for each achievement
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
@@ -178,15 +177,6 @@ impl UnlockedAchievement {
     }
 }
 
-/// Helper function to check if a challenge qualifies for specific achievement criteria
-pub fn check_fast_completion(time: Duration, threshold_secs: u64) -> bool {
-    time.as_secs() < threshold_secs
-}
-
-pub fn check_efficient_completion(keystrokes: Option<u32>, threshold: u32) -> bool {
-    keystrokes.map_or(false, |ks| ks < threshold)
-}
-
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -211,18 +201,5 @@ mod tests {
         let unlocked = UnlockedAchievement::new(AchievementId::FirstSteps, now);
         assert_eq!(unlocked.id(), AchievementId::FirstSteps);
         assert_eq!(unlocked.unlocked_at(), now);
-    }
-
-    #[test]
-    fn test_check_fast_completion() {
-        assert!(check_fast_completion(Duration::from_secs(5), 10));
-        assert!(!check_fast_completion(Duration::from_secs(15), 10));
-    }
-
-    #[test]
-    fn test_check_efficient_completion() {
-        assert!(check_efficient_completion(Some(15), 20));
-        assert!(!check_efficient_completion(Some(25), 20));
-        assert!(!check_efficient_completion(None, 20));
     }
 }

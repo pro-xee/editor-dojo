@@ -7,11 +7,6 @@
 /// 4. Recording hash verification works
 /// 5. Backwards compatibility with unsigned results
 
-use std::fs;
-use std::io::Write;
-use std::path::PathBuf;
-use tempfile::TempDir;
-
 // Note: These tests would require access to the editor-dojo modules
 // For now, this serves as documentation of the test scenarios
 

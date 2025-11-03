@@ -59,7 +59,7 @@ pub fn sign_result(
 /// Verify result signature using constant-time comparison
 ///
 /// Returns true if signature is valid, false otherwise
-pub fn verify_signature(
+pub(crate) fn verify_signature(
     challenge_id: &str,
     strokes: u32,
     time_ms: u64,
@@ -76,7 +76,7 @@ pub fn verify_signature(
 }
 
 /// Verify that recording file hash matches stored hash
-pub fn verify_recording_hash<P: AsRef<Path>>(
+pub(crate) fn verify_recording_hash<P: AsRef<Path>>(
     recording_path: P,
     expected_hash: &str,
 ) -> anyhow::Result<bool> {
@@ -106,7 +106,7 @@ fn constant_time_compare(a: &str, b: &str) -> bool {
 }
 
 /// Check if this is a production build with secure signing key
-pub fn is_production_build() -> bool {
+pub(crate) fn is_production_build() -> bool {
     IS_PRODUCTION_BUILD
 }
 
