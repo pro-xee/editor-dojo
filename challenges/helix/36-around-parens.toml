@@ -9,6 +9,12 @@ tags = ["text-object", "parentheses", "deletion", "around"]
 generic = "Delete the parentheses and everything inside them"
 helix = "Move cursor to or inside parentheses, press 'ma(' to select around parentheses, press 'd' to delete"
 
+hint_1 = "Around parentheses 'ma(' selects the parentheses and their contents"
+hint_2 = "Position cursor on or near the parentheses, then use the text object"
+hint_3 = "Complete: 'f(' to find '(', 'ma(d' to select around parens and delete"
+optimal_solution = "f(ma(d\x1b"
+optimal_keystrokes = 6
+
 [content]
 starting = "public void Process();"
 target = "public void Process;"

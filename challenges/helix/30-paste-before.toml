@@ -8,6 +8,11 @@ tags = ["deletion", "paste", "movement"]
 [hints]
 generic = "Delete a word and paste it before another position"
 helix = "Move to 'async', press 'wd' to delete word, move to 'T' in Task, press 'P' to paste before"
+hint_1 = "When you delete text with 'd', it's automatically copied (like cut)"
+hint_2 = "Navigate to 'async' (skip 'public' and 'Task'), delete with 'wd', then move back to 'Task'"
+hint_3 = "Complete: 'ww' to reach 'async', 'wd' to delete word, 'b' to go back to 'Task', 'P' to paste before"
+optimal_solution = "wwwdbP"
+optimal_keystrokes = 6
 
 [content]
 starting = "public Task async ProcessAsync()"

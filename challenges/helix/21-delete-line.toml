@@ -8,6 +8,11 @@ tags = ["deletion", "line"]
 [hints]
 generic = "Delete the entire line where the cursor is positioned"
 helix = "Position cursor on comment line, press 'dd' to delete entire line"
+hint_1 = "The 'x' command in Helix deletes the entire current line (or selected lines)"
+hint_2 = "Navigate to line 2 using 'j' to move down one line, or '2g' to jump to line 2"
+hint_3 = "Complete: 'j' to move to comment line, 'x' to delete the line"
+optimal_solution = "jx"
+optimal_keystrokes = 2
 
 [content]
 starting = """public class MyClass {

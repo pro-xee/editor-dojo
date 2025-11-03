@@ -8,6 +8,11 @@ tags = ["change", "word", "modification"]
 [hints]
 generic = "Delete a word and enter insert mode"
 helix = "Move cursor to 'int', press 'cw' to change word, type 'long', press Escape"
+hint_1 = "The 'c' command is like 'd' but enters insert mode after deleting"
+hint_2 = "Navigate to 'int' using 'w' to move from 'private' → 'int'"
+hint_3 = "Complete: 'w' to reach 'int', 'cw' to change word, type 'long', Escape"
+optimal_solution = "wcwlong\x1b"
+optimal_keystrokes = 8
 
 [content]
 starting = "private int _maxValue;"

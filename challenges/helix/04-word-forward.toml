@@ -8,6 +8,11 @@ tags = ["movement", "word-navigation", "deletion"]
 [hints]
 generic = "Move forward by words until you reach the target, then delete it"
 helix = "Use 'w' to move forward by words, then 'wd' to delete the word"
+hint_1 = "The 'w' command moves the cursor to the start of the next word"
+hint_2 = "Use 'w' multiple times to navigate: from 'int' → 'count' → '=' → 'Console'"
+hint_3 = "Once on 'Console', use 'wd' to delete the word (select word + delete)"
+optimal_solution = "wwwwd"
+optimal_keystrokes = 5
 
 [content]
 starting = "int count = Console.ReadLine();"

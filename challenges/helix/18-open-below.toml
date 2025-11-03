@@ -8,6 +8,11 @@ tags = ["insertion", "line", "open"]
 [hints]
 generic = "Open a new line below the current line and enter insert mode"
 helix = "Position on the first line, press 'o' to open line below, type '    return _count;', press Escape"
+hint_1 = "The 'o' command opens a new line below the cursor and enters insert mode"
+hint_2 = "You'll need to add proper indentation (4 spaces) when typing the new line"
+hint_3 = "Complete: 'o' to open below, type '    return _count;', Escape"
+optimal_solution = "o    return _count;\x1b"
+optimal_keystrokes = 22
 
 [content]
 starting = "public int GetCount() {"

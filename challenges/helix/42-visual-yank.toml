@@ -8,6 +8,11 @@ tags = ["visual", "selection", "yank", "copy"]
 [hints]
 generic = "Use visual mode to select text, copy it, and paste"
 helix = "Move to 'p' in public, press 'v', extend to end of 'Name', press 'y' to yank, press 'o' to open line below, paste with 'p', press Escape"
+hint_1 = "Select text using motions: 'w' for word-by-word, combine multiple 'w' to select range"
+hint_2 = "From 'public', select through 'Name': use 'www' or 'wwe' to select"
+hint_3 = "Complete: 'wwey' to select 'public string Name' and yank, 'op' to open below and paste, Escape"
+optimal_solution = "wweyop\x1b"
+optimal_keystrokes = 7
 
 [content]
 starting = "public string Name { get; set; }"

@@ -8,6 +8,11 @@ tags = ["text-object", "word", "deletion", "inner"]
 [hints]
 generic = "Delete just the word itself, not surrounding whitespace"
 helix = "Move cursor anywhere in '_counter', press 'miw' to select inner word, press 'd' to delete"
+hint_1 = "Text objects let you operate on structured elements like words, regardless of cursor position within them"
+hint_2 = "'mi' selects 'inner' text object, 'w' specifies word. This selects only the word, not whitespace"
+hint_3 = "Complete: navigate to '_counter', 'miwd' to select inner word and delete"
+optimal_solution = "wwmiwd"
+optimal_keystrokes = 6
 
 [content]
 starting = "private int _counter = 0;"

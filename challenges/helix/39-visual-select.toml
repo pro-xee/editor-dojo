@@ -8,6 +8,11 @@ tags = ["visual", "selection", "deletion"]
 [hints]
 generic = "Enter visual mode to select characters, then delete"
 helix = "Move to 'r' in readonly, press 'v' to enter visual mode, press 'w' to extend selection, press 'd' to delete"
+hint_1 = "In Helix, selections work automatically - you don't need visual mode like Vim"
+hint_2 = "Simply use motions with 'd' or 'c' - for example 'wd' selects word and deletes"
+hint_3 = "Complete: 'wwd' to move to 'readonly' and delete the word (including space)"
+optimal_solution = "wwd"
+optimal_keystrokes = 3
 
 [content]
 starting = "private readonly string _name;"

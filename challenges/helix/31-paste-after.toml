@@ -8,6 +8,11 @@ tags = ["yank", "copy", "paste"]
 [hints]
 generic = "Copy text and paste it after cursor position"
 helix = "Move to 'set', select 'set;' with 'vf;', press 'y' to yank, move to '}' after get, press 'p' to paste after"
+hint_1 = "Select 'set;' by extending to the semicolon, then yank with 'y'"
+hint_2 = "Navigate to 'set', use 'vf;' in visual mode to select to ';', or use 'wf;' in Helix"
+hint_3 = "Complete: navigate to 'set', 'wf;' to select word + ';', 'y' to yank, 'F}' to find '}', 'p' to paste after"
+optimal_solution = "eeeeewf;yF}p"
+optimal_keystrokes = 12
 
 [content]
 starting = "public int Count { get; set; }"

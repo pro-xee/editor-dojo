@@ -8,6 +8,11 @@ tags = ["visual", "line", "deletion"]
 [hints]
 generic = "Enter visual line mode to select entire lines, then delete"
 helix = "Move to first comment, press 'V' (capital V) for visual line mode, press 'j' to extend to next line, press 'd' to delete"
+hint_1 = "In Helix, 'x' selects the current line. Press it multiple times to extend selection"
+hint_2 = "Navigate to line 2, select with 'x', extend to line 3 with 'x', then delete"
+hint_3 = "Complete: 'j' to line 2, 'x' to select line, 'x' again to extend to line 3, 'd' to delete"
+optimal_solution = "jxxd"
+optimal_keystrokes = 4
 
 [content]
 starting = """public class MyClass {

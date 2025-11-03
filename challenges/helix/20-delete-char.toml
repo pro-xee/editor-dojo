@@ -8,6 +8,11 @@ tags = ["deletion", "character"]
 [hints]
 generic = "Delete the character under the cursor"
 helix = "Move cursor to '?', press 'x' to delete character"
+hint_1 = "The 'x' command deletes the character at the cursor position"
+hint_2 = "Navigate to the '?' using 'e' to move to end of 'string'"
+hint_3 = "Complete: 'e' to reach end of 'string', 'x' to delete the '?'"
+optimal_solution = "ex"
+optimal_keystrokes = 2
 
 [content]
 starting = "string? name = null;"
