@@ -8,6 +8,11 @@ tags = ["movement", "word-navigation", "deletion"]
 [hints]
 generic = "Move backward by words to reach the target, then delete it"
 helix = "Position cursor at end, use 'b' to move backward by words, then 'wd' to delete"
+hint_1 = "The 'b' command moves the cursor to the start of the previous word"
+hint_2 = "From the semicolon, navigate backward: 'b' moves through 'args', ']', 'string', '(', 'Main', 'void', 'static'"
+hint_3 = "Once on 'static', use 'wd' to delete the word and trailing space"
+optimal_solution = "$bbbbbbbwd"
+optimal_keystrokes = 10
 
 [content]
 starting = "public static void Main(string[] args);"

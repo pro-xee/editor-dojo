@@ -8,6 +8,11 @@ tags = ["movement", "find", "deletion", "repeat"]
 [hints]
 generic = "Find a character, then repeat the find motion to move to next occurrences"
 helix = "Press 'f_' to find first '_', press 'x' to delete, then ';x' twice more (';' repeats find, 'x' deletes)"
+hint_1 = "After using 'f', the ';' key repeats the last find motion forward"
+hint_2 = "Strategy: find first underscore with 'f_', delete with 'x', then repeat with ';x' for each remaining"
+hint_3 = "Complete: 'f_' find, 'x' delete, ';' next, 'x' delete, ';' next, 'x' delete → 'f_x;x;x'"
+optimal_solution = "f_x;x;x"
+optimal_keystrokes = 7
 
 [content]
 starting = "private string _user_name_value;"

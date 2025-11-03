@@ -8,6 +8,11 @@ tags = ["movement", "line-navigation", "deletion"]
 [hints]
 generic = "Navigate to a specific line number and delete it"
 helix = "Press '2g' to go to line 2, then 'dd' to delete the line"
+hint_1 = "In Helix, 'g' followed by a line number goes to that line"
+hint_2 = "Type '2g' to jump to line 2 (the empty line with the brace)"
+hint_3 = "Use 'dd' or 'x' to delete the entire line. Complete: '2gx'"
+optimal_solution = "2gx"
+optimal_keystrokes = 3
 
 [content]
 starting = """public class MyClass

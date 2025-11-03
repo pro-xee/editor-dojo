@@ -9,6 +9,12 @@ tags = ["csharp", "attribute", "property"]
 generic = "Open a line above the property and add the attribute"
 helix = "Position on property line, press 'O' to open line above, type '[JsonProperty(\"user_name\")]', press Escape"
 
+hint_1 = "Attributes in C# are placed on the line above the target with square brackets"
+hint_2 = "'O' opens a new line above the cursor and enters insert mode"
+hint_3 = "Complete: 'O' to open above, type '[JsonProperty("user_name")]', Escape"
+optimal_solution = "O[JsonProperty("user_name")]\x1b"
+optimal_keystrokes = 30
+
 [content]
 starting = "public string UserName { get; set; }"
 target = """[JsonProperty("user_name")]

@@ -8,6 +8,11 @@ tags = ["deletion", "line-end"]
 [hints]
 generic = "Delete from cursor position to the end of the line"
 helix = "Move cursor to '=' character, press 'D' to delete to end of line"
+hint_1 = "To delete to line end in Helix: select to end with 'gl$' then 'd', or use 'd$'"
+hint_2 = "Navigate to '=' using 'f=' to find the character"
+hint_3 = "Complete: 'f=' to reach '=', 'd$' to delete from there to line end"
+optimal_solution = "f= d$"
+optimal_keystrokes = 5
 
 [content]
 starting = "private int _counter = 0;"

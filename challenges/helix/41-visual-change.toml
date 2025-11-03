@@ -8,6 +8,11 @@ tags = ["visual", "selection", "change"]
 [hints]
 generic = "Use visual mode to select text, then change it"
 helix = "Move to 's' in string[], press 'v', extend selection with motion keys to cover 'string[]', press 'c' to change, type 'List<string>', press Escape"
+hint_1 = "Use motions to select: 'w' selects word, 'e' extends to end, 'f]' finds ']'"
+hint_2 = "Navigate to 'string', then use 'wf]c' to select to ']' and change"
+hint_3 = "Complete: navigate to 'string', 'wf]c' to select 'string[]' and change, type 'List<string>', Escape"
+optimal_solution = "eeewf]cList<string>\x1b"
+optimal_keystrokes = 22
 
 [content]
 starting = "public void Process(string[] args)"

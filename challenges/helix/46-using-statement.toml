@@ -9,6 +9,12 @@ tags = ["csharp", "using", "modern", "refactor"]
 generic = "Remove the braces and keep just the using declaration"
 helix = "Delete 'statement' after using, move to '{', press 'dd' to delete line with brace, navigate to closing '}' and delete it"
 
+hint_1 = "Using declarations (C# 8+) remove braces, variable is disposed at end of scope"
+hint_2 = "Delete 'statement', delete the opening brace line, delete the closing brace"
+hint_3 = "Complete: find and delete 'statement', delete brace lines with line selection + delete"
+optimal_solution = "/statementwwd/{jx/}x\x1b"
+optimal_keystrokes = 16
+
 [content]
 starting = """using (var stream = File.OpenRead(path)) {
     ProcessStream(stream);

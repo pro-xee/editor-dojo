@@ -8,6 +8,11 @@ tags = ["yank", "copy", "paste", "line"]
 [hints]
 generic = "Copy an entire line and paste it"
 helix = "Position on the line, press 'yy' to yank line, press 'p' to paste below"
+hint_1 = "In Helix, 'x' selects the entire line, then 'y' yanks (copies) it"
+hint_2 = "'p' pastes the yanked content after the cursor/line"
+hint_3 = "Complete: 'xy' to select and yank the line, 'p' to paste below"
+optimal_solution = "xyp"
+optimal_keystrokes = 3
 
 [content]
 starting = "public string Name { get; set; }"

@@ -8,6 +8,11 @@ tags = ["yank", "copy", "paste", "word"]
 [hints]
 generic = "Copy a word and paste it elsewhere"
 helix = "Move to 'public', press 'yw' to yank word, move to 's' in string, press 'P' to paste before cursor"
+hint_1 = "In Helix, 'y' yanks (copies) the selection. Combine with 'w' to select and yank a word"
+hint_2 = "After yanking, navigate to where you want to paste. 'P' pastes before cursor"
+hint_3 = "Complete: 'wy' to select and yank 'public', use 'w' multiple times to reach 'string', 'P' to paste before, 'h' to add space"
+optimal_solution = "wyeeeeeeP "
+optimal_keystrokes = 10
 
 [content]
 starting = "public int Count { get; } string Name;"

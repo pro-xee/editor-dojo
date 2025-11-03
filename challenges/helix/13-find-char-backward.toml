@@ -8,6 +8,11 @@ tags = ["movement", "find", "deletion"]
 [hints]
 generic = "Find a character moving backward on the line"
 helix = "Position at end, press 'F(' to find '(' backward, then 'x' to delete character"
+hint_1 = "'F' (capital F) finds a character backward on the current line"
+hint_2 = "From the end of the line, type 'F(' to find the opening parenthesis"
+hint_3 = "Use 'x' or 'd' to delete the character. Complete: '$F(x'"
+optimal_solution = "$F(x"
+optimal_keystrokes = 4
 
 [content]
 starting = "Console.WriteLine(message);"

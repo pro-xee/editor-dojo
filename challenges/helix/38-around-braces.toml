@@ -8,6 +8,11 @@ tags = ["text-object", "braces", "change", "around"]
 [hints]
 generic = "Change the braces and everything inside them"
 helix = "Move cursor to/inside braces, press 'ma{' to select around braces, press 'c' to change, type '=> 42;', press Escape"
+hint_1 = "Around braces 'ma{' selects the braces and all their contents"
+hint_2 = "Navigate to the braces area, select around them, then change to new syntax"
+hint_3 = "Complete: 'f{' to find '{', 'ma{c' to select around braces and change, type '=> 42;', Escape"
+optimal_solution = "f{ma{c=> 42;\x1b"
+optimal_keystrokes = 12
 
 [content]
 starting = "public int GetValue() { return _value; }"

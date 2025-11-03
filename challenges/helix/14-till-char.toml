@@ -8,6 +8,11 @@ tags = ["movement", "find", "insertion"]
 [hints]
 generic = "Move till (before) a character and insert text"
 helix = "Press 't(' to move till '(', then 'i' to insert, type 'Async', press Escape"
+hint_1 = "The 't' command moves till (just before) a character"
+hint_2 = "Type 't(' to move cursor just before the '(' character"
+hint_3 = "Complete: 't(' to position, 'i' to insert, type 'Async', Escape"
+optimal_solution = "t(iAsync\x1b"
+optimal_keystrokes = 9
 
 [content]
 starting = "public void Process()"

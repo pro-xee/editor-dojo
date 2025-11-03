@@ -9,6 +9,12 @@ tags = ["csharp", "property", "refactor", "expression-body"]
 generic = "Replace the property body with an expression body (=>)"
 helix = "Move to '{', press 'ma{' to select around braces, press 'c' to change, type '=> _name;', press Escape"
 
+hint_1 = "Expression-bodied members use '=>' syntax for single-expression properties"
+hint_2 = "Select the entire property body '{ get { return _name; } }' and replace it"
+hint_3 = "Complete: 'f{ma{c' to find '{', select around braces and change, type '=> _name;', Escape"
+optimal_solution = "f{ma{c=> _name;\x1b"
+optimal_keystrokes = 13
+
 [content]
 starting = "public string Name { get { return _name; } }"
 target = "public string Name => _name;"

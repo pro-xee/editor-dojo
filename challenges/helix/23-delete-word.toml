@@ -8,6 +8,11 @@ tags = ["deletion", "word"]
 [hints]
 generic = "Delete an entire word"
 helix = "Move cursor to 'static', press 'wd' to delete word (including trailing space)"
+hint_1 = "In Helix, 'w' selects the current word, and 'd' deletes the selection"
+hint_2 = "Navigate to 'static' using 'w' twice: 'public' → 'static'"
+hint_3 = "Complete: 'ww' to reach 'static', 'wd' to select and delete the word"
+optimal_solution = "wwwd"
+optimal_keystrokes = 4
 
 [content]
 starting = "public static async Task ProcessAsync()"
