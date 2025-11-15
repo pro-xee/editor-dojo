@@ -1,12 +1,16 @@
 use std::path::{Path, PathBuf};
 use std::sync::mpsc;
-use std::time::Instant;
+use std::time::{Duration, Instant};
 
-use anyhow::Result;
+use anyhow::{bail, Result};
 
 use crate::application::validator::SolutionValidator;
 use crate::domain::{Challenge, Solution};
 use crate::infrastructure::recorder::Recorder;
+
+/// Maximum time allowed for a challenge attempt before timing out
+/// This prevents infinite hangs if the editor process doesn't terminate properly
+const CHALLENGE_TIMEOUT: Duration = Duration::from_secs(300); // 5 minutes
 
 /// Trait for spawning and managing an editor process
 pub trait EditorSpawner {
@@ -119,6 +123,18 @@ where
         // Wait for file changes and validate
         let mut completed = false;
         loop {
+            // Check for timeout
+            if start_time.elapsed() > CHALLENGE_TIMEOUT {
+                // Timeout exceeded - forcefully terminate
+                if let Some(mut child) = recording_process {
+                    let _ = child.kill();
+                    let _ = child.wait();
+                } else {
+                    let _ = self.editor.terminate();
+                }
+                bail!("Challenge attempt timed out after {} seconds. The editor process may have hung.", CHALLENGE_TIMEOUT.as_secs());
+            }
+
             // Check if process is still running
             let is_running = if let Some(child) = recording_process.as_mut() {
                 child.try_wait()?.is_none()
@@ -146,7 +162,7 @@ where
             }
 
             // Small sleep to avoid busy waiting
-            std::thread::sleep(std::time::Duration::from_millis(100));
+            std::thread::sleep(Duration::from_millis(100));
         }
 
         let elapsed = start_time.elapsed();

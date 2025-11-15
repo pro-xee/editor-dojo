@@ -1,6 +1,6 @@
 use crate::application::{AchievementChecker, ProgressRepository};
 use crate::domain::{Achievement, ChallengeStats, Progress, Solution};
-use anyhow::Result;
+use anyhow::{Context, Result};
 use chrono::Utc;
 use std::sync::{Arc, Mutex};
 
@@ -21,13 +21,18 @@ impl<R: ProgressRepository> ProgressTracker<R> {
     }
 
     /// Get current progress (thread-safe read)
-    pub fn get_progress(&self) -> Progress {
-        self.progress.lock().unwrap().clone()
+    pub fn get_progress(&self) -> Result<Progress> {
+        let progress = self.progress
+            .lock()
+            .map_err(|_| anyhow::anyhow!("Failed to acquire progress lock - mutex was poisoned"))?;
+        Ok(progress.clone())
     }
 
     /// Record a challenge attempt
     pub fn record_solution(&self, challenge_id: &str, solution: &Solution) -> Result<()> {
-        let mut progress = self.progress.lock().unwrap();
+        let mut progress = self.progress
+            .lock()
+            .map_err(|_| anyhow::anyhow!("Failed to acquire progress lock - mutex was poisoned"))?;
 
         let keystrokes = solution
             .recording()
@@ -46,29 +51,35 @@ impl<R: ProgressRepository> ProgressTracker<R> {
     }
 
     /// Get stats for a specific challenge
-    pub fn get_challenge_stats(&self, challenge_id: &str) -> Option<ChallengeStats> {
-        let progress = self.progress.lock().unwrap();
-        progress.get_challenge_stats(challenge_id).cloned()
+    pub fn get_challenge_stats(&self, challenge_id: &str) -> Result<Option<ChallengeStats>> {
+        let progress = self.progress
+            .lock()
+            .map_err(|_| anyhow::anyhow!("Failed to acquire progress lock - mutex was poisoned"))?;
+        Ok(progress.get_challenge_stats(challenge_id).cloned())
     }
 
     /// Check if this solution beats any personal record
-    pub fn is_new_record(&self, challenge_id: &str, solution: &Solution) -> (bool, bool) {
-        let progress = self.progress.lock().unwrap();
+    pub fn is_new_record(&self, challenge_id: &str, solution: &Solution) -> Result<(bool, bool)> {
+        let progress = self.progress
+            .lock()
+            .map_err(|_| anyhow::anyhow!("Failed to acquire progress lock - mutex was poisoned"))?;
 
         if let Some(stats) = progress.get_challenge_stats(challenge_id) {
             let keystrokes = solution
                 .recording()
                 .map(|r| r.keystroke_count() as u32);
-            stats.is_new_record(solution.elapsed_time(), keystrokes)
+            Ok(stats.is_new_record(solution.elapsed_time(), keystrokes))
         } else {
             // First attempt is always a new record if completed
-            (solution.is_completed(), solution.is_completed())
+            Ok((solution.is_completed(), solution.is_completed()))
         }
     }
 
     /// Set editor preference
     pub fn set_editor_preference(&self, editor: String) -> Result<()> {
-        let mut progress = self.progress.lock().unwrap();
+        let mut progress = self.progress
+            .lock()
+            .map_err(|_| anyhow::anyhow!("Failed to acquire progress lock - mutex was poisoned"))?;
         *progress = progress.clone().set_editor_preference(editor);
         self.repository.save(&progress)?;
         Ok(())
@@ -76,13 +87,17 @@ impl<R: ProgressRepository> ProgressTracker<R> {
 
     /// Persist current progress to storage
     pub fn save(&self) -> Result<()> {
-        let progress = self.progress.lock().unwrap();
+        let progress = self.progress
+            .lock()
+            .map_err(|_| anyhow::anyhow!("Failed to acquire progress lock - mutex was poisoned"))?;
         self.repository.save(&progress)
     }
 
     /// Check for new achievements and update progress
     pub fn check_achievements(&self, total_challenges: usize) -> Result<Vec<Achievement>> {
-        let mut progress = self.progress.lock().unwrap();
+        let mut progress = self.progress
+            .lock()
+            .map_err(|_| anyhow::anyhow!("Failed to acquire progress lock - mutex was poisoned"))?;
         let newly_unlocked = AchievementChecker::check_achievements(&mut *progress, total_challenges);
 
         if !newly_unlocked.is_empty() {
@@ -135,7 +150,7 @@ mod tests {
         let solution = Solution::completed(Duration::from_secs(10));
         tracker.record_solution("test-1", &solution).unwrap();
 
-        let progress = tracker.get_progress();
+        let progress = tracker.get_progress().unwrap();
         assert_eq!(progress.total_completed(), 1);
         assert_eq!(progress.total_practice_time(), Duration::from_secs(10));
     }
@@ -146,7 +161,7 @@ mod tests {
         let tracker = ProgressTracker::new(repo).unwrap();
 
         let solution = Solution::completed(Duration::from_secs(10));
-        let (new_time, new_ks) = tracker.is_new_record("test-1", &solution);
+        let (new_time, new_ks) = tracker.is_new_record("test-1", &solution).unwrap();
 
         assert!(new_time); // First completion is always a new record
         assert!(new_ks);
@@ -161,7 +176,7 @@ mod tests {
         tracker.record_solution("test-1", &first).unwrap();
 
         let second = Solution::completed(Duration::from_secs(8));
-        let (new_time, _) = tracker.is_new_record("test-1", &second);
+        let (new_time, _) = tracker.is_new_record("test-1", &second).unwrap();
 
         assert!(new_time);
     }
@@ -175,7 +190,7 @@ mod tests {
         tracker.record_solution("test-1", &first).unwrap();
 
         let second = Solution::completed(Duration::from_secs(12));
-        let (new_time, _) = tracker.is_new_record("test-1", &second);
+        let (new_time, _) = tracker.is_new_record("test-1", &second).unwrap();
 
         assert!(!new_time);
     }

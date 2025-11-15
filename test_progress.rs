@@ -29,7 +29,7 @@ fn main() -> Result<()> {
     let solution1 = Solution::completed(Duration::from_secs(10));
     tracker.record_solution("challenge-1", &solution1)?;
 
-    let progress = tracker.get_progress();
+    let progress = tracker.get_progress()?;
     println!("  Total completed: {}", progress.total_completed());
     println!("  Total practice time: {:?}", progress.total_practice_time());
     println!("✓ First completion recorded\n");
@@ -37,11 +37,11 @@ fn main() -> Result<()> {
     // Test 3: Record better attempt
     println!("Test 3: Recording improved time...");
     let solution2 = Solution::completed(Duration::from_secs(8));
-    let (new_time_record, _) = tracker.is_new_record("challenge-1", &solution2);
+    let (new_time_record, _) = tracker.is_new_record("challenge-1", &solution2)?;
     println!("  Is new record: {}", new_time_record);
     tracker.record_solution("challenge-1", &solution2)?;
 
-    let progress = tracker.get_progress();
+    let progress = tracker.get_progress()?;
     println!("  Total practice time: {:?}", progress.total_practice_time());
     println!("✓ Improved time recorded\n");
 
@@ -50,14 +50,14 @@ fn main() -> Result<()> {
     let solution3 = Solution::completed(Duration::from_secs(15));
     tracker.record_solution("challenge-2", &solution3)?;
 
-    let progress = tracker.get_progress();
+    let progress = tracker.get_progress()?;
     println!("  Total completed: {}", progress.total_completed());
     println!("  Total attempts: {}", progress.total_attempts());
     println!("✓ Second challenge recorded\n");
 
     // Test 5: Calculate statistics
     println!("Test 5: Calculating statistics...");
-    let progress = tracker.get_progress();
+    let progress = tracker.get_progress()?;
     println!("  Average solve time: {:?}", progress.average_solve_time());
     println!("  Current streak: {}", progress.calculate_current_streak(chrono::Utc::now().date_naive()));
     println!("  Longest streak: {}", progress.longest_streak());
@@ -69,7 +69,7 @@ fn main() -> Result<()> {
 
     let repo2 = JsonProgressRepository::with_path(test_file.clone());
     let tracker2 = ProgressTracker::new(repo2)?;
-    let loaded_progress = tracker2.get_progress();
+    let loaded_progress = tracker2.get_progress()?;
 
     println!("  Loaded completed count: {}", loaded_progress.total_completed());
     println!("  Loaded practice time: {:?}", loaded_progress.total_practice_time());

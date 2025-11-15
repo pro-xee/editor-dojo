@@ -29,7 +29,8 @@ fn main() -> Result<()> {
         .context("Failed to load progress")?;
 
     // Set default editor if not set
-    let progress = progress_tracker.get_progress();
+    let progress = progress_tracker.get_progress()
+        .context("Failed to retrieve progress")?;
     if progress.editor_preference().is_none() {
         progress_tracker.set_editor_preference("Helix".to_string())?;
     }
@@ -44,7 +45,8 @@ fn main() -> Result<()> {
 
     // Main application loop
     loop {
-        let progress = progress_tracker.get_progress();
+        let progress = progress_tracker.get_progress()
+            .context("Failed to retrieve progress")?;
         let mut main_menu = MainMenuScreen::new();
 
         let action = main_menu
@@ -58,14 +60,16 @@ fn main() -> Result<()> {
                 }
             }
             MenuAction::ViewProgress => {
-                let progress = progress_tracker.get_progress();
+                let progress = progress_tracker.get_progress()
+                    .context("Failed to retrieve progress")?;
                 let progress_screen = ProgressScreen::new();
                 progress_screen.show(&progress, total_challenges)
                     .context("Failed to display progress screen")?;
             }
             MenuAction::BrowseChallenges => {
                 // Show challenge list without starting one
-                let progress = progress_tracker.get_progress();
+                let progress = progress_tracker.get_progress()
+                    .context("Failed to retrieve progress")?;
                 let list_screen = ChallengeListScreen::new(challenges.clone())
                     .with_progress(progress);
                 let _ = list_screen.show();
@@ -125,7 +129,8 @@ fn run_training<R: application::ProgressRepository>(
     let total_challenges = challenges.len();
 
     // Show challenge list screen with progress
-    let progress = progress_tracker.get_progress();
+    let progress = progress_tracker.get_progress()
+        .context("Failed to retrieve progress")?;
     let list_screen = ChallengeListScreen::new(challenges.to_vec())
         .with_progress(progress);
     let selected_challenge = list_screen

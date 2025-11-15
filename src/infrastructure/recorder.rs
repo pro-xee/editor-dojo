@@ -1,9 +1,29 @@
-use anyhow::{Context, Result};
+use anyhow::{bail, Context, Result};
 use std::path::{Path, PathBuf};
 use std::process::{Child, Command};
 
 use crate::domain::{KeySequence, Recording};
 use super::cast_parser::CastParser;
+
+/// Validates a challenge ID to prevent path traversal and ensure safe filenames
+///
+/// Challenge IDs must only contain alphanumeric characters and dashes
+fn validate_challenge_id(challenge_id: &str) -> Result<()> {
+    if challenge_id.is_empty() {
+        bail!("Challenge ID cannot be empty");
+    }
+
+    if !challenge_id.chars().all(|c| c.is_alphanumeric() || c == '-' || c == '_') {
+        bail!("Invalid challenge ID '{}': must contain only alphanumeric characters, dashes, and underscores", challenge_id);
+    }
+
+    // Prevent path traversal attempts
+    if challenge_id.contains("..") || challenge_id.contains('/') || challenge_id.contains('\\') {
+        bail!("Invalid challenge ID '{}': cannot contain path separators or '..'", challenge_id);
+    }
+
+    Ok(())
+}
 
 /// Trait for recording challenge attempts.
 pub trait Recorder {
@@ -59,6 +79,9 @@ impl AsciinemaRecorder {
 
     /// Generates a unique recording filename for a challenge.
     pub fn generate_recording_path(challenge_id: &str) -> Result<PathBuf> {
+        // Validate challenge ID for security
+        validate_challenge_id(challenge_id)?;
+
         let recordings_dir = Self::ensure_recordings_dir()?;
         let timestamp = std::time::SystemTime::now()
             .duration_since(std::time::UNIX_EPOCH)
@@ -152,5 +175,30 @@ mod tests {
         // This will depend on whether asciinema is actually installed
         // Just ensure the method doesn't panic
         let _ = AsciinemaRecorder::is_available();
+    }
+
+    #[test]
+    fn test_validate_challenge_id_valid() {
+        assert!(validate_challenge_id("test-01").is_ok());
+        assert!(validate_challenge_id("challenge_123").is_ok());
+        assert!(validate_challenge_id("abc-123-xyz").is_ok());
+        assert!(validate_challenge_id("simple").is_ok());
+    }
+
+    #[test]
+    fn test_validate_challenge_id_invalid() {
+        // Empty ID
+        assert!(validate_challenge_id("").is_err());
+
+        // Path traversal attempts
+        assert!(validate_challenge_id("../etc/passwd").is_err());
+        assert!(validate_challenge_id("..").is_err());
+        assert!(validate_challenge_id("test/path").is_err());
+        assert!(validate_challenge_id("test\\path").is_err());
+
+        // Invalid characters
+        assert!(validate_challenge_id("test@123").is_err());
+        assert!(validate_challenge_id("test:id").is_err());
+        assert!(validate_challenge_id("test id").is_err());
     }
 }
